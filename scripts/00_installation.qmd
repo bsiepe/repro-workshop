@@ -1,0 +1,48 @@
+---
+title: "Installationshilfe" 
+author:
+  - name: "Björn S. Siepe"
+    orcid: 0000-0002-9558-4648
+    
+date: "June 16, 2025"
+format: pdf
+---
+
+## Anforderungen 
+
+### R und RStudio
+
+Um am praktischen Teil des Workshops teilnehmen zu können, müssen Sie R und RStudio (v2022.07 oder höher) installiert haben, die Sie hier  <https://www.r-project.org/> und hier: <https://posit.co/download/rstudio-desktop/> herunterladen können. ``Quarto`` ist dann in der RStudio-Installation enthalten. 
+
+### R-Pakete
+
+Wir werden die folgenden zusätzlichen R-Pakete im Workshop verwenden. Sie können diese vor Ort oder im Voraus installieren, indem Sie den folgenden Code in die **R-Konsole** eingeben: 
+```r
+install.packages(c("quarto", "tidyverse", "flextable"))
+```
+
+### LateX zum Rendern von PDFs (optional)
+
+Um Dokumente im PDF-Format darzustellen, muss ``Quarto`` auf ``LaTeX`` zugreifen können. Wenn Sie ```LaTeX`` noch nicht installiert haben, können Sie die leichtgewichtige Version ``TinyTex`` installieren, indem Sie das Folgende in Ihr **Terminal** eingeben:
+
+```bash
+quarto install tinytex
+```
+
+Weitere Anleitungen zu ``LaTeX``, finden Sie hier: <https://quarto.org/docs/output-formats/pdf-basics.html>
+
+
+## Alternative 1: andere Entwicklungsumgebungen (optional)
+
+Im Workshop werden wir R und RStudio zur Demonstration verwenden, aber ````Quarto`` kann auch mit Python anstelle von R und mit VS Code, Jupyter Notebooks oder anderen Entwicklungsumgebungen anstelle von RStudio verwendet werden. Die folgende Seite ist ein guter Startpunkt: <https://quarto.org/docs/get-started/hello/vscode.html>
+
+## Alternative 2: Arbeiten in der Posit-Cloud (optional)
+
+Wenn Sie nichts auf Ihrem Computer installieren können oder möchten, können Sie auch eine Cloud-Version von R und RStudio verwenden. Melden Sie sich bei der **Posit Cloud** (<https://login.posit.cloud>) an und:
+
+- registrieren Sie sich mit Ihrer E-Mail-Adresse und wählen Sie ein Passwort;
+- wählen Sie die Option „Free Cloud“.
+- Sobald Sie eingeloggt sind, gehen Sie zu Ihrem Arbeitsbereich und klicken Sie auf „Neues Projekt“ (oben rechts), dann wählen Sie „Neues RStudio-Projekt“.
+
+
+Dieses Dokument orientiert sich am Workshop von González, Molo & Pawel [(2024)](https://doi.org/10.5281/zenodo.14169002). Bei Fragen können Sie mich gerne vorab unter bjoernsiepe@gmail.com kontaktieren.

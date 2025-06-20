@@ -1,0 +1,567 @@
+---
+title: | 
+  Reproduzierbare Forschung \
+  mit R und Quarto -- Einleitung
+subtitle: Workshop für die GSE Wuppertal
+date:  "27. Juni, 2025"
+date-format: long
+author:
+  - Björn S. Siepe
+editor: source
+preview-links: true
+include-in-header:
+  - text: |
+      <style>
+      #title-slide .title {
+        font-size: 1.8em;
+        color: #29487d;
+      }
+      </style>
+format: 
+  revealjs:
+    menu: true
+    pdf: true
+    smaller: true
+    auto-stretch: false
+    embed-resources: true
+    progress: true
+    incremental: true
+    slide-number: true
+    title-slide-attributes:
+      data-background-size: contain
+      data-background-position: bottom
+      data-background-opacity: "0.8"
+bibliography: references.bib
+---
+
+# Einstieg
+## Plan für Heute
+
+1. **Einleitung**
+   - Was ist Reproduzierbarkeit?
+   - Einfache Strategien ("Easy Wins")
+   - Einführung in dynamische Berichte
+
+2. **Praktischer Teil**
+   - Erstellung dynamischer Berichte mit Quarto
+   - Typische Herausforderungen und Lösungen
+
+3. **Fortgeschrittene Themen**
+   - Nächste Schritte für mehr Reproduzierbarkeit
+   - Tools und Best Practices
+
+4. **Zusammenfassung & Abschlussdiskussion**
+   - Was haben wir gelernt?
+   - Offene Fragen & Ausblick
+
+---
+
+## Sehr grober Zeitplan
+
+| Uhrzeit        | Programmpunkt                                |
+|----------------|-----------------------------------------------|
+| 10:00 – 10:15  | Begrüßung & Einführung                        |
+| 10:15 – 11:15  | **Einleitung**                                |
+| 11:15 – 11:20  | ☕ Kurze Pause                                |
+| 11:20 – 12:30  | **Praktischer Teil 1**                         |
+| 12:30 – 13:15  | 🍽️ Mittagspause                              |
+| 13:15 – 14:20  | **Praktischer Teil 2**                         |
+| 14:20 – 14:30  | ☕ Kurze Pause                                |
+| 14:30 – 15:30  | **Fortgeschrittene Themen**                   |
+| 15:30 – 16:00  | **Zusammenfassung & Abschlussdiskussion**     |
+
+---
+
+## Vorabinformation
+
+Teile dieses Workshops beruhen teils verbatim oder sehr nah auf folgenden Ressourcen, 
+welche ich mit einer CC-BY Lizenz verwende: 
+-   [CRS Primer on dynamic reporting](https://doi.org/10.5281/zenodo.7565735)
+-   @Molo2025 
+-   @Peikert2025
+-   Teils recht opinionated
+
+
+TODO Link zu Materialien nochmals.
+
+------------------------------------------------------------------------
+
+## Computational reproducibility
+
+Eine sehr einfache Definition:
+
+[Die **gleiche Analyse**]{.fragment} [der **gleichen Daten**]{.fragment} [führt zu den **gleichen Ergebnissen**]{.fragment}
+
+\ 
+
+::: fragment
+![@Turing2024](img/Turing-reproducible.png){fig-align="center" width="50%"}
+:::
+------------------------------------------------------------------------
+
+## Example
+
+![](img/samuel2024.png){fig-align="center" width="75%"}
+
+::: incremental
+- Es wurde versucht, **22.578 Jupyter-Notebooks**, die mit 3.467 Publikationen aus PubMed verknüpft sind, erneut auszuführen.
+- Für 10.388 dieser Notebooks konnten alle angegebenen Abhängigkeiten erfolgreich installiert werden
+- 1.203 Notebooks liefen ohne Fehler durch
+- **879 Notebooks (4 %)** lieferten Ergebnisse, die mit denen des Originals identisch waren
+:::
+
+::: fragment
+$\rightarrow$ **Computational reproducibility kann schwierig sein!**
+:::
+------------------------------------------------------------------------
+
+
+## Terminologie
+
+<br>
+
+![@theturingwaycommunity2022](img/turingway_reproducible_matrix.jpg){fig-align="center" width="75%"}
+
+------------------------------------------------------------------------
+
+## Computational Reproducibility
+
+![@Molo2025](img/reproducible.png){.absolute right="0" top="0" height="75"}
+
+![From @Molo2025, inspired by @peng2011 and @Peikert2021](img/comp-repro-spectrum.png)
+
+------------------------------------------------------------------------
+
+## Replicability: Beispiel
+
+![](img/replicable.png){.absolute right="0" top="0" height="75"}
+
+![@opensciencecollaboration2015](img/replicability_open_science_collaboration.jpeg){fig-align="center" width="640"}
+
+------------------------------------------------------------------------
+
+## Robustness: Beispiel
+
+![](img/robust.png){.absolute right="0" top="0" height="75"}
+
+::::: {.columns align="center"}
+::: {.column width="50%"}
+![@gould2023](img/ecology_1.png)
+:::
+
+::: {.column width="50%"}
+![](img/ecology_2.png){height="400"}
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Generalizability
+
+![](img/generalizable.png){.absolute right="0" top="0" height="75"}
+
+<br>
+
+
+![@Turing2024](img/Turing-generalisable.png){fig-align="center" width="50%"}
+
+::: fragment
+$\rightarrow$ **Reproducibility + Robustness + Replicability necessary for Generalizabilty!**
+:::
+
+------------------------------------------------------------------------
+
+## Jeder Schritt zählt
+
+:::::::::::: {.columns align="center"}
+:::::: fragment
+::::: {.columns align="center"}
+::: {.column width="72%"}
+Aber reproduzierbare Forschung ist schwierig und kann sich überwältigend anfühlen.
+:::
+
+::: {.column width="28%"}
+
+:::
+:::::
+::::::
+
+::::::: fragment
+:::::: {.columns align="center"}
+:::: {.column width="72%"}
+Kein Grund zur Verzweiflung! Mit jedem Schrit::
+
+::: incremental
+-   seid Ihr einen Schritt näher an reproduzierbarer Forschung
+-   verbessert Ihr die Qualität eurer Forschung und erleichtert euer Leben
+-   lernt Ihr breit anwendbare technische Skills
+:::
+::::
+
+::: {.column width="28%"}
+
+:::
+::::::
+:::::::
+::::::::::::
+
+------------------------------------------------------------------------
+
+# Easy Wins
+
+## Projektstruktur
+### Vorher: Chaos 📁
+
+```         
+-   Paper_final_wirklich_final.docx 
+-   daten.xlsx code_alt.R 
+-   code_neu_funktioniert.R 
+-   plot1.png 
+```
+
+### Nachher: Ordnung ✨
+
+```         
+projekt/
+├── data/
+│   ├── raw/
+│   └── processed/
+├── scripts/
+├── output/
+└── README.md
+
+```
+
+::::: callout-note
+## Praxis-Tipp
+
+Erstellt eine Standard-Ordnerstruktur und kopiert diese für neue Projekte! 
+:::::
+
+------------------------------------------------------------------------
+
+## Dateinamen
+
+::: columns
+::: {.column}
+### ❌ Problematisch
+- `Daten.xlsx`  
+- `neue analyse.R`  
+- `plot final FINAL.png`  
+- `Fragebogen - Kopie (2).docx`
+:::
+
+::: {.column}
+### ✅ Besser
+- `2025-06-28_fragebogen-daten-roh.xlsx`  
+- `01_datenbereinigung.R`  
+- `02_deskriptive-statistik.R`  
+- `abb01_altersverteilung.png`
+:::
+:::
+
+---
+
+## Code-Dokumentation
+
+### ❌ Unzureichend:
+Unklarer Name, keine Dokumentation:
+```r
+logmlis <- function(x){
+  lapply(x, function(x){
+   y <- unlist(x)
+   y <- y[!is.na(y)]
+   y <- y[y != ""]
+   return(mean(log(y)))
+  })
+}
+```
+
+### ✅ Besser:
+Klarer Name, konzise Dokumentation:
+```r
+log_mean_list <- function(x) {
+  # Calculates the logarithmic mean of a list of numerical values
+  # Removes NA and empty values before the calculation
+  y <- unlist(x)  
+  y <- y[!is.na(y)]  
+  y <- y[y != ""]  
+  return(mean(log(y)))  
+}
+```
+
+---
+
+## Code-Dokumentation
+
+- Viele unterschiedliche Meinungen
+- In der Wissenschaft: Lieber etwas zu viel als zu wenig
+
+::: {.callout-note}
+## Praxis-Tipp
+Nach @Peikert2025: 
+
+1. Was standardisiert ist, muss nicht dokumentiert werden.
+2. Was einfach ist, braucht nur wenig Dokumentation.
+3. Was konsistent ist, muss nur einmal dokumentiert werden.
+:::
+
+---
+
+## Dateipfade
+
+### ❌ Absoluter Pfad (schlecht):
+```r         
+daten <- read.csv("C:/Users/Maria/Desktop/Masterarbeit/daten.csv") 
+```
+**Problem:** Funktioniert nur auf Ihrem Computer!
+
+### ✅ Relativer Pfad (gut):
+```r        
+daten <- read.csv("data/raw/fragebogen-daten.csv") 
+```
+
+Noch besser: Verwendung des `here` packages (funktioniert mit verschiedenen Systemen):
+```r
+library(here)
+daten <- read.csv(here("data", "raw", "fragebogen-daten.csv"))
+```
+------------------------------------------------------------------------
+
+
+---
+
+## Aufteilung in verschiedene Skripte
+
+### ❌ Ein großes Skript:
+```r
+# complete_analysis.R (500+ lines)
+# Data import, cleaning, analysis, plots, export...
+```
+
+### ✅ Modulare Aufteilung:
+- `01_data_import.R` - Rohdaten laden
+- `02_data_cleaning.R` - Präprozessierung
+- `03_descriptive_analysis.R` - Deskriptive Statistiken
+- `04_inferential_statistics.R` - Inferenz
+- `05_visualization.R` - Abbildungen
+- `06_export.R` - Export
+
+**Vorteile:** Übersichtlicher, leichter zu debuggen, bessere Zusammenarbeit
+
+---
+
+## Funktionsbasiertes Programmieren
+
+### ❌ Code-Wiederholung:
+```r
+# Standardization for variable 1
+data$var1_std <- (data$var1 - mean(data$var1, na.rm = TRUE)) / 
+                 sd(data$var1, na.rm = TRUE)
+
+# Standardization for variable 2  
+data$var2_std <- (data$var2 - mean(data$var2, na.rm = TRUE)) / 
+                 sd(data$var2, na.rm = TRUE)
+
+# Standardization for variable 3...
+```
+
+### ✅ Funktion erstellen:
+```r
+standardize_variable <- function(x) {
+  # Z-standardization of a numeric variable
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+
+# Application
+data$var1_std <- standardize_variable(data$var1)
+data$var2_std <- standardize_variable(data$var2)
+data$var3_std <- standardize_variable(data$var3)
+
+# Or even better
+data <- data |>
+  mutate(across(starts_with("var"), standardize_variable))
+```
+
+---
+
+## Vermeiden von "magic numbers"
+
+### ❌ Unklare Zahlen im Code:
+```r
+# What do these numbers mean?
+clean_data <- data[data$age >= 18 & data$age <= 65, ]
+final_data <- clean_data[clean_data$score > 2.5, ]
+significant <- results[results$p_value < 0.05, ]
+```
+
+### ✅ Benannte Konstanten:
+```r
+# Clear definitions at the beginning of the script
+MIN_AGE <- 18
+MAX_AGE <- 65
+MIN_SCORE <- 2.5
+ALPHA_LEVEL <- 0.05
+
+# Usage in code
+clean_data <- data[data$age >= MIN_AGE & 
+                   data$age <= MAX_AGE, ]
+final_data <- clean_data[clean_data$score > MIN_SCORE, ]
+significant <- results[results$p_value < ALPHA_LEVEL, ]
+```
+
+**Vorteil:** Code wird selbsterklärend und leichter anpassbar
+
+---
+
+## Session Info
+
+### Warum wichtig?
+- **Reproduzierbarkeit:** Welche R-Version und Pakete wurden verwendet?
+- **Fehlerdiagnose:** Unterschiedliche Paketversionen können verschiedene Ergebnisse liefern
+- **Dokumentation:** Vollständige Nachvollziehbarkeit der Analyse
+
+::: fragment
+### ✅ Am Ende jedes Skripts:
+```r
+# Session information for reproducibility
+sessionInfo()
+```
+::: 
+
+::: fragment
+::: {.callout-tip}
+## Praxis-Tipp
+Entwedern in Quarto direkt rendern oder in separatem File speichern:
+```r
+writeLines(capture.output(sessionInfo()), "session_info.txt")
+```
+:::
+:::
+
+# Dynamische Reports
+## Typischer, nicht-dynamischer Workflow
+
+![@Molo2025](img/non-dynamic-workflow.jpg){height="400"}
+
+------------------------------------------------------------------------
+
+## Typische Probleme
+
+:::::: {.columns align="center"}
+::: {.column width="40%" align="top"}
+![@Molo2025](img/dependencies.png){height="400"}
+:::
+
+:::: {.column width="60%"}
+::: incremental
+- **unklarer** Ausführungsreihenfolge
+
+- **Zeitaufwendiges** Copy-Pasten
+
+- **Fehleranfälliges** Copy-Pasten
+
+<!-- -   unclear further processing of images and tables\ -->
+:::
+::::
+::::::
+
+------------------------------------------------------------------------
+
+## Dynamische Reports: Das Ziel {.center}
+
+[`Daten` $\rightarrow$ dynamischer Report $\rightarrow$ `Manuskript`]{style="font-size: 1.5em;"}
+
+------------------------------------------------------------------------
+
+## Ein Workflow für dynamische Reports
+
+![@Molo2025](img/dynamic-workflow.jpg)
+
+
+------------------------------------------------------------------------
+
+## Komponenten eines dynamischen Reports
+
+![@Molo2025](img/dynamic_reporting_components.png)
+
+TODO Quelle einfügen
+
+------------------------------------------------------------------------
+
+## Text: Typische Markup-Sprachen
+
+![@Molo2025](img/markup-languages.png)
+
+------------------------------------------------------------------------
+
+
+## Manche Implementierungen
+
+\
+\
+
+|   | Datei | Code | Markup | Output Formate |
+|---------------|---------------|---------------|---------------|---------------|
+| Sweave | .Rnw | R | LaTeX | pdf, tex |
+| R Markdown | .Rmd | R | Markdown | pdf, html, tex, docx, pptx |
+| Jupyter Notebook | .ipynb | Julia, Python, R | Markdown | pdf, html, tex, py, ... |
+| Quarto | .qmd | Julia, Python, R | Markdown | pdf, html, tex, docx, pptx, ... |
+
+: {.striped tbl-colwidths="\[29,10,26,18,38\]"}
+
+------------------------------------------------------------------------
+
+## Warum Quarto?
+
+::::: columns
+::: {.column width="75%"}
+- **open source**
+- **modern**, wird kontinuierlich weiterentwickelt
+- **einfache Handhabung**
+- **Mehrere Programmiersprachen** (z.B. R, Python, Julia)
+- **vielfältige Editoren/IDEs** (z. B. RStudio, VS Code)
+- **allgemeines** wissenschaftliches Publikationssystem (z. B. Artikel, Folien, Websites)
+:::
+
+::: {.column width="25%"}
+![[<https://quarto.org/quarto.png>]{style="font-size:0.6em"}](img/quarto.png)
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Quarto in RStudio
+
+![@Molo2025](img/quarto-rstudio-example-html.jpg){fig-align="center" width="82%"}
+
+
+------------------------------------------------------------------------
+
+## Quarto in RStudio: PDF Output
+
+![@Molo2025](img/quarto-rstudio-example-pdf.png){fig-align="center" width="82%"}
+
+------------------------------------------------------------------------
+
+## Quarto in RStudio: MS Word output
+
+![@Molo2025](img/quarto-rstudio-example-word.png){fig-align="center" width="82%"}
+
+
+------------------------------------------------------------------------
+
+## Weitere Literatur
+
+-   CRS Primer zu dynamischen Reports: <https://doi.org/10.5281/zenodo.7565735>\
+-   Quarto Intro Tutorial: <https://quarto.org/docs/get-started/hello/rstudio.html>\
+-   Quarto Authoring Tutorial: <https://quarto.org/docs/get-started/authoring/>\
+-   Quarto Layout: <https://quarto.org/docs/authoring/article-layout.html>\
+-   R4DS Kapitel zu Quarto: <https://r4ds.hadley.nz/quarto>\
+-   Yihui Xie's Blog: [With Quarto coming, is R Markdown going away? No.](https://yihui.org/en/2022/04/quarto-r-markdown/)\
+-   Reproducible manuscripts with Quarto: [Folien von Mine Cetinkaya-Rundel](https://mine.quarto.pub/manuscripts-conf23/#/title-slide)\
+-   Quarto/RMarkdown -- What's different?: [Folien von Ted Laderas](https://laderast.github.io/qmd_rmd/#/title-slide)
+
+------------------------------------------------------------------------
+
+## Literatur {.smaller}
