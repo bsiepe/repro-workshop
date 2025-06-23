@@ -154,8 +154,9 @@ plot(cars, main="Speed vs Distance")
 ::: aside
 @wickham2023
 :::
-------------------------------------------------------------------------
-## Code Chunks: Optionen
+
+
+## Code Chunks: Anpassung
 
 -   Code Chunks können mit verschiedenen Optionen angepasst werden
     - Namen
@@ -166,55 +167,160 @@ plot(cars, main="Speed vs Distance")
 #| label: Beispielchunk
 #| echo: true 
 #| fig-width: 6
-
 ```
 
-------------------------------------------------------------------------
+
 ## Code Chunks: Optionen
 
 Verschiedene Optionen können in den Code Chunks verwendet werden:
 
-![@wickham2023](img/chunk-options.png){fig-align="center" width="600"}
+![@wickham2023](img/chunk-options.png){fig-align="center" width="860"}
 
 
-------------------------------------------------------------------------
 ## Inline Code
 
--   Inline Code wird mit `r` oder `python` in Backticks geschrieben:
+- Inline Code wird mit `r` oder `python` in Backticks geschrieben:
 
-```{{markdown}}
-Der Mittelwert der ganzen Zahlen von 1 bis 5 ist  `r mean(c(1, 2, 3, 4, 5))`.
-```
+````markdown
+Der Mittelwert der ganzen Zahlen von 1 bis 5 ist `r mean(c(1, 2, 3, 4, 5))`.
+````
+
 Ergibt:
 
 Der Mittelwert der ganzen Zahlen von 1 bis 5 ist `r mean(c(1, 2, 3, 4, 5))`.
 
-------------------------------------------------------------------------
+## Visual Editor
+
+- Quarto bietet einen Visual Editor, der die Bearbeitung von Markdown-Dateien erleichtert
+- Er kann über das Menü "View" → "Visual Editor" aktiviert werden
+- Er ermöglicht eine WYSIWYG-Erfahrung
+
 ## Übung 1
 
 Zeit zum Üben!
--   Laden Sie entweder aufgabe_01.qmd herunter oder erstellen Sie eine neue Quarto-Datei.
--   Personalisieren Sie den YAML-Header.
--   Schreiben Sie einen kurzen Einleitungstext.
+
+- Laden Sie entweder `aufgabe_01.qmd` herunter oder erstellen Sie eine neue Quarto-Datei.
+- Personalisieren Sie den YAML-Header.
+- Laden Sie den "USArrests" Datensatz in R. Dies geht mit `data("USArrests")`.
+- Schreiben Sie einen kurzen Einleitungstext für eine Beispielanalyse. Verwenden Sie unterschiedliche Formatierungen.
+- Berichten Sie über das Minimum und Maximum einer der Variablen in einem Satz.
 
 ## Abbildungen
 
-## Tabellen
+- Beispiel:
+
+::: fragment
+```{r}
+#| echo: true
+#| fig-width: 9
+#| fig-height: 5
+#| code-fold: true
+
+data("USArrests")
+library(ggplot2)
+ggplot(USArrests, aes(x = UrbanPop, y = Murder, color = Assault)) +
+  geom_point(size = 3, alpha = 0.8) +
+  scale_color_gradient(low = "#56B1F7", high = "#132B43") +
+  labs(
+    title = "Zusammenhang zwischen Urbanisierung und Mordrate",
+    subtitle = "USArrests Datensatz (1973)",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Mordrate pro 100.000 Einwohner",
+    color = "Anzahl\nAssault"
+  ) +
+  theme_minimal(base_size = 14)
+```
+:::
+
+## Mehrere Abbildungen
+
+- Wir können auch mehrere Abbildungen zusammen einfügen:
+
+::: fragment
+```{r}
+#| echo: false
+#| fig-width: 6
+#| fig-height: 6
+#| layout-ncol: 1
+#| code-fold: true
+
+# Scatterplot
+library(ggplot2)
+data("USArrests")
+
+p1 <- ggplot(USArrests, aes(x = UrbanPop, y = Murder)) +
+  geom_point(color = "#56B1F7", size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "#132B43") +
+  labs(
+    title = "Urbanisierung vs. Mordrate",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Mordrate pro 100.000"
+  ) +
+  theme_minimal()
+
+# Histogram
+p2 <- ggplot(USArrests, aes(x = Assault)) +
+  geom_histogram(bins = 15, fill = "#56B1F7", alpha = 0.7) +
+  labs(
+    title = "Verteilung der Assault-Raten",
+    x = "Assault pro 100.000 Einwohner",
+    y = "Anzahl Bundesstaaten"
+  ) +
+  theme_minimal()
+
+# Anzeigen
+p1
+p2
+```
+::: 
 
 ## Externe Grafiken
 
+- Externe Bilder können mit Markdown-Syntax oder knitr::include_graphics() eingefügt werden:
+
+**Markdown-Syntax:**
+````markdown
+![Bildbeschreibung](pfad/zum/bild.png){width=50%}
+````
+
+**R Code Chunk:**
+```{r}
+#| echo: true
+#| eval: false
+#| fig-cap: "Externes Bild"
+#| out-width: "60%"
+
+knitr::include_graphics("images/my_plot.png")
+```
+
+**Online-Bilder:**
+````markdown
+![R Logo](https://www.r-project.org/logo/Rlogo.png){width=200px}
+````
+
+## Tabellen
+
+TODO
+
 ## Übung 2
+
+TODO
 
 ## Referenzen
 
+TODO
+
 ## Rechenintensive Chunks
+
+TODO
 
 ## Übung 3
 
+TODO
 
 ## Session Info
 ```{r}
-sessionInfo()
+pander::pander(sessionInfo())
 ```
 ------------------------------------------------------------------------
 ## Literatur {.smaller}
