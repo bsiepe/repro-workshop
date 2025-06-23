@@ -86,38 +86,28 @@ renv::dependencies()  # Abhängigkeiten auflisten
 ## Nützliche Tools 2: `targets` 
 Pipeline für **Reproduzierbarkeit** von R-Projekten
 
-![@targets2021 & wlandau.github.io](img/targets.png){fig-align="center" width="400"}
+![@targets2021 & wlandau.github.io](img/targets_graph.png){fig-align="center" width="400"}
 
 ------------------------------------------------------------------------
 
-
-
 ## Versionskontrolle mit Git
 
-::::::: columns
-:::: {.column width="70%"}
+::: columns
+::: {.column width="70%"}
 ::: incremental
 - **De-facto-Standard** Versionskontrollsystem
-
 - Kann **in der Zeit zurückgehen** zu früheren Versionen
-
 - Kann **Änderungen** zwischen Versionen verfolgen
-
 - Kann **verzweigen und zusammenführen**
-
 - Nützlich für **Kollaboration** und **Dateitransfer**
-
 - **Command-Line-Schnittstelle** (Lernkurve)
-
 - **Grafische Schnittstelle** in vielen Editoren/IDEs (z. B. RStudio, VS Code)
-
-- **Git** (Software) ≠ **GitHub**/**GitLab** (Git-Repository-Hosting-Dienste)
-
+- **Git** (Software) ≠ **GitHub**/GitLab (Git-Repository-Hosting-Dienste)
 - Snapshots ermöglichen die **dauerhafte Archivierung** (mit DOI) auf Daten-Repositories (z. B. Zenodo)
 :::
-::::
+:::
 
-:::: {.column width="30%"}
+::: {.column width="30%"}
 ![[<https://git-scm.com/downloads/logos>]{style="font-size:0.6em"}](img/Git-logo.png){fig-align="center" width="150"}
 
 ![@Turing2024](img/git-turing-way.png){fig-align="center" width="500"}
@@ -125,29 +115,43 @@ Pipeline für **Reproduzierbarkeit** von R-Projekten
 ::: fragment
 ![[<https://commons.wikimedia.org/wiki/File:Git_operations.svg>]{style="font-size:0.7em"}](img/Git_operations.png)
 :::
-::::
-:::::::
+:::
+:::
 
-------------------------------------------------------------------------
+---
+
+## Versionskontrolle mit Git - Wo starten?
+
+- **Git installieren**
+- **GitHub Account** erstellen
+- **Git in RStudio** aktivieren
+- **RStudio-Projekt** erstellen
+- **RStudio-Projekt mit Git** initialisieren
+- **RStudio-Projekt mit GitHub verbinden**
+
+::: fragment
+Gute Ressource:
+- Happy Git with R: <https://happygitwithr.com/>
+::: 
+
+---
+
 ## Automatisierung mit Make
 
--   Tool für **komputationale Rezepte**
--   Automatisierung von mehreren Schritten in einem
+- Tool für **komputationale Rezepte**
+- Automatisierung von mehreren Schritten in einem
 
-. . .
-
-:::::: columns
+::: columns
 ::: {.column width="50%"}
 > Arrabbiata sauce, or sugo all'arrabbiata in Italian, is a spicy sauce for pasta made from garlic, tomatoes, and dried red chili peppers cooked in olive oil.
 
 [https://en.wikipedia.org/wiki/Arrabbiata_sauce](https://en.wikipedia.org/wiki/Arrabbiata_sauce){style="font-size:0.7em"}
 :::
 
-:::: {.column width="50%"}
-::: fragment
-Makefile
+::: {.column width="50%"}
+**Makefile**
 ``` makefile
-arrabiata.pdf: arrabiata.qmd sauce.csv pasta.R 
+arrabiata.pdf: arrabiata.qmd sauce.csv pasta.R
   quarto render arrabiata.qmd
 
 sauce.csv: cook.R tomatoes.zip aromatics.yaml
@@ -158,50 +162,46 @@ aromatics.yaml: sizzle.py garlic.txt chili.json
   python sizzle.py chili.json
 ```
 
-
-Terminal
+**Terminal**
 ``` bash
 make arrabiata.pdf # execute recipe
 ```
 :::
-::::
-::::::
+:::
 
 ::: fragment
 ![@Molo2025](img/Make-diagram.png){fig-align="center" width="600"}
 :::
 
-
-
-------------------------------------------------------------------------
+---
 
 ## Containerisierung mit Docker
 
 ::::::: columns
 ::::: {.column width="75%"}
 ::: incremental
--   **Software containers** encapsulate computational environment
+-   **Software Container** beinhalten das komputationale Umfeld für die Ausführung von Code
 
--   Computational environment components:
+-   Komponenten eines Containers: 
 
-    -   Operating system
-    -   R and R packages
-    -   Numerical software libraries (e.g., LAPACK, BLAS)
-    -   other software (e.g., LaTeX, Java)
+    -   Operating System (OS)
+    -   R und R-Pakete (oder andere Programmiersprachen)
+    -   Numerische Bibliotheken (z.B., LAPACK, BLAS)
+    -   Andere Software (z.B., LaTeX, Java)
 
--   **Docker** is a popular tool for containerization
+-   **Docker** ist ein beliebtes Containerisierungstool
 
--   **Rocker** is a Docker image for R (<https://rocker-project.org/>)
+-   **Rocker** ist ein Docker Image für R (<https://rocker-project.org/>)
 :::
 
 ::: fragment
 Dockerfile
 
 ``` dockerfile
-# Uses a Rocker container image with R version 4.4 
+# Rocker container image mit R 4.4
 FROM rocker/verse:4.4
 
-# Install R package versions at time when R 4.4 was up-to-date
+# R Packages zum damaligen Zeitpunkt installieren
 RUN install2.r ggplot2 dplyr kableExtra
 ```
 :::
@@ -218,7 +218,7 @@ RUN install2.r ggplot2 dplyr kableExtra
 
 :::::: columns
 ::: {.column width="55%"}
-![Modified from @Peikert2021](img/workflow-quarto.png)
+![Nach @Peikert2021 und @Molo2025](img/workflow-quarto.png)
 :::
 
 :::: {.column width="45%"}
@@ -226,32 +226,15 @@ RUN install2.r ggplot2 dplyr kableExtra
 Terminal
 
 ``` {.bash style="font-size:0.85em"}
-# clone git repository
-git clone git@gitlab.uzh.ch:crsuzh/zurich-names.git
-
-# enter project repository
-cd zurich-names
-
-# run automated analyses
+# alles in einem Schritt ausführen
 make docker-report
 ```
 
 → `report.html`
 
-[https://gitlab.uzh.ch/crsuzh/zurich-names](https://gitlab.uzh.ch/crsuzh/zurich-names){style="font-size:0.65em"}
 :::
 ::::
 ::::::
-
-<!-- ------------------------------------------------------------------------ -->
-
-<!-- ## Gallery     -->
-
-<!-- - Robustness reproduction: <https://gitlab.uzh.ch/crsuzh/nhb-replication> -->
-
-<!-- - Handling Missingness in Simulation Studies: <https://github.com/SamCH93/missSim> -->
-
-<!-- - Power priors for replication studies: <https://github.com/SamCH93/ppReplication> -->
 
 ------------------------------------------------------------------------
 
@@ -260,7 +243,9 @@ make docker-report
 -   Welche Tools könnten am nützlichsten sein?
 -   Welche Tools sind am schwierigsten zu lernen?
 -   Wo sind die größten verbleibenden Hürden?
+
 ------------------------------------------------------------------------
+
 ## Zusammenfassung
 
 - Dynamische Reports + Versionskontrolle + Automatisierung + Containerisierung
@@ -268,7 +253,6 @@ make docker-report
     - verbessert **Reproduzierbarkeit**, **Wiederverwendbarkeit**, **Zusammenarbeit**
     - verleiht der Forschung mehr **Transparenz**, **Glaubwürdigkeit**
 
-. . .
 
 - Es gibt eine **Lernkurve** , aber ...
 
@@ -282,18 +266,36 @@ make docker-report
 
 
 ------------------------------------------------------------------------
+## Quarto für andere Dinge
+
+-   Quarto für eigene Webseiten: <https://quarto.org/docs/websites/>
+-   Quarto für Blogs: <https://quarto.org/docs/blogs/>
+-   Quarto für Bücher: <https://quarto.org/docs/books/>
+-   Quarto für Präsentationen: <https://quarto.org/docs/presentations/>
+-   Quarto für Lehrmaterialien: Beispiel <https://datavizf24.classes.andrewheiss.com/>
+
+------------------------------------------------------------------------
+## Kontakt
 
 ## Kontakt
 
-Vielen Dank für die Aufmerksamkeit!
+<div style="text-align:center; font-size:1.2em; line-height:1.7;">
 
-Mail: 
+**Vielen Dank für die Aufmerksamkeit!** 🎉
+
+<br>
+
+📧 <a href="mailto:bjoern.siepe@uni-marburg.de">bjoern.siepe@uni-marburg.de</a>  
+🌐 <a href="https://bsiepe.github.io" target="_blank">bsiepe.github.io</a>  
+🌤️ <a href="https://bsky.app/profile/bsiepe.bsky.social" target="_blank">bsky.app/profile/bsiepe.bsky.social</a>
+
+</div>
 
 
 
 ## Session Info
 ```{r}
-sessionInfo()
+pander::pander(sessionInfo())
 ```
 ------------------------------------------------------------------------
 ## Literatur {.smaller}
