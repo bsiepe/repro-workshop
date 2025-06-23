@@ -1,0 +1,23 @@
+---
+title: "02_praxis_beispiel"
+format: html
+---
+
+# Grundlagen
+
+# Datenexplorierung
+
+# Visualisierung
+
+# Analyse
+
+# Integration
+
+
+## Session Info
+```{r}
+sessionInfo()
+```
+------------------------------------------------------------------------
+## Literatur {.smaller}
+

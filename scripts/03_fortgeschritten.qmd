@@ -1,0 +1,299 @@
+---
+title: | 
+  Reproduzierbare Forschung \
+  mit R und Quarto -- Fortgeschrittenes
+subtitle: Workshop für die GSE Wuppertal
+date:  "27. Juni, 2025"
+date-format: long
+author:
+  - Björn S. Siepe
+editor: source
+preview-links: true
+include-in-header:
+  - text: |
+      <style>
+      #title-slide .title {
+        font-size: 1.8em;
+        color: #29487d;
+      }
+      </style>
+format: 
+  revealjs:
+    menu: true
+    pdf: true
+    smaller: true
+    auto-stretch: false
+    embed-resources: true
+    progress: true
+    incremental: true
+    slide-number: true
+    title-slide-attributes:
+      data-background-size: contain
+      data-background-position: bottom
+      data-background-opacity: "0.8"
+bibliography: references.bib
+---
+## Reproducibility ist ein Spektrum
+
+![@Molo2025](img/comp-repro-spectrum.png){fig-align="center" width="323"}
+
+. . .
+
+- Ziel heute: Verstehen, **was möglich ist** auf der rechten Seite
+
+- ~~Ziel heute: Tiefes technisches Verständnis für fortgeschrittene Arbeitsabläufe ~~
+
+------------------------------------------------------------------------
+
+
+
+## Dynamische Reports lösen copy-paste Probleme, aber...
+
+::: incremental
+- Wie behält man den Überblick über verschiedene **Dateiversionen**?
+    - `Paper-final.qmd` → `Paper-final2.qmd` → `Paper-final2b.qmd` → 😱
+    - Lösung: **Git**
+- Woher weiß man, welche Dateien in welcher **Reihenfolge** ausgeführt werden sollen?
+    - `functions.qmd`, `analysis.qmd`, `plots.qmd`, `paper.qmd`, 🤔
+    - Lösung: **Make**
+- Wie stellt man sicher, dass der Code noch läuft, wenn sich **Softwareversionen** ändern?
+    - Heute": R Version 4.5, ggplot2 3.5.2 → `Nächstes Jahr`: R Version ❓, ggplot2 ❓
+    - Lösung: **Docker**
+- Sehr schönes Paper über einen solchen Workflow: @Peikert2021
+:::
+
+::: aside
+@Molo2025
+::: 
+------------------------------------------------------------------------
+
+## Nützliche Tools 1: `renv`
+
+-   **R package** für **Reproduzierbarkeit** von R-Projekten  
+
+::: columns
+::: .column width="50%"
+```{{r}}
+renv::init())  # renv initialisieren
+renv::snapshot()  # Abhängigkeiten erfassen
+renv::restore()  # Abhängigkeiten wiederherstellen
+renv::dependencies()  # Abhängigkeiten auflisten
+```
+::: 
+::: .column width="50%"
+![@renv2025](img/renv.png){fig-align="center" width="200"}
+------------------------------------------------------------------------
+## Nützliche Tools 2: `targets` 
+Pipeline für **Reproduzierbarkeit** von R-Projekten
+
+![@targets2021 & wlandau.github.io](img/targets.png){fig-align="center" width="400"}
+
+------------------------------------------------------------------------
+
+
+
+## Versionskontrolle mit Git
+
+::::::: columns
+:::: {.column width="70%"}
+::: incremental
+- **De-facto-Standard** Versionskontrollsystem
+
+- Kann **in der Zeit zurückgehen** zu früheren Versionen
+
+- Kann **Änderungen** zwischen Versionen verfolgen
+
+- Kann **verzweigen und zusammenführen**
+
+- Nützlich für **Kollaboration** und **Dateitransfer**
+
+- **Command-Line-Schnittstelle** (Lernkurve)
+
+- **Grafische Schnittstelle** in vielen Editoren/IDEs (z. B. RStudio, VS Code)
+
+- **Git** (Software) ≠ **GitHub**/**GitLab** (Git-Repository-Hosting-Dienste)
+
+- Snapshots ermöglichen die **dauerhafte Archivierung** (mit DOI) auf Daten-Repositories (z. B. Zenodo)
+:::
+::::
+
+:::: {.column width="30%"}
+![[<https://git-scm.com/downloads/logos>]{style="font-size:0.6em"}](img/Git-logo.png){fig-align="center" width="150"}
+
+![@Turing2024](img/git-turing-way.png){fig-align="center" width="500"}
+
+::: fragment
+![[<https://commons.wikimedia.org/wiki/File:Git_operations.svg>]{style="font-size:0.7em"}](img/Git_operations.png)
+:::
+::::
+:::::::
+
+------------------------------------------------------------------------
+## Automatisierung mit Make
+
+-   Tool für **komputationale Rezepte**
+-   Automatisierung von mehreren Schritten in einem
+
+. . .
+
+:::::: columns
+::: {.column width="50%"}
+> Arrabbiata sauce, or sugo all'arrabbiata in Italian, is a spicy sauce for pasta made from garlic, tomatoes, and dried red chili peppers cooked in olive oil.
+
+[https://en.wikipedia.org/wiki/Arrabbiata_sauce](https://en.wikipedia.org/wiki/Arrabbiata_sauce){style="font-size:0.7em"}
+:::
+
+:::: {.column width="50%"}
+::: fragment
+Makefile
+``` makefile
+arrabiata.pdf: arrabiata.qmd sauce.csv pasta.R 
+  quarto render arrabiata.qmd
+
+sauce.csv: cook.R tomatoes.zip aromatics.yaml
+  R -e "source(cook.R)"
+
+aromatics.yaml: sizzle.py garlic.txt chili.json
+  python sizzle.py garlic.txt
+  python sizzle.py chili.json
+```
+
+
+Terminal
+``` bash
+make arrabiata.pdf # execute recipe
+```
+:::
+::::
+::::::
+
+::: fragment
+![@Molo2025](img/Make-diagram.png){fig-align="center" width="600"}
+:::
+
+
+
+------------------------------------------------------------------------
+
+## Containerisierung mit Docker
+
+::::::: columns
+::::: {.column width="75%"}
+::: incremental
+-   **Software containers** encapsulate computational environment
+
+-   Computational environment components:
+
+    -   Operating system
+    -   R and R packages
+    -   Numerical software libraries (e.g., LAPACK, BLAS)
+    -   other software (e.g., LaTeX, Java)
+
+-   **Docker** is a popular tool for containerization
+
+-   **Rocker** is a Docker image for R (<https://rocker-project.org/>)
+:::
+
+::: fragment
+Dockerfile
+
+``` dockerfile
+# Uses a Rocker container image with R version 4.4 
+FROM rocker/verse:4.4
+
+# Install R package versions at time when R 4.4 was up-to-date
+RUN install2.r ggplot2 dplyr kableExtra
+```
+:::
+:::::
+
+::: {.column width="25%"}
+![[<https://commons.wikimedia.org/wiki/File:Docker-svgrepo-com.svg>]{style="font-size:0.7em"}](img/docker.png)
+:::
+:::::::
+
+------------------------------------------------------------------------
+
+## Alles zusammen
+
+:::::: columns
+::: {.column width="55%"}
+![Modified from @Peikert2021](img/workflow-quarto.png)
+:::
+
+:::: {.column width="45%"}
+::: fragment
+Terminal
+
+``` {.bash style="font-size:0.85em"}
+# clone git repository
+git clone git@gitlab.uzh.ch:crsuzh/zurich-names.git
+
+# enter project repository
+cd zurich-names
+
+# run automated analyses
+make docker-report
+```
+
+→ `report.html`
+
+[https://gitlab.uzh.ch/crsuzh/zurich-names](https://gitlab.uzh.ch/crsuzh/zurich-names){style="font-size:0.65em"}
+:::
+::::
+::::::
+
+<!-- ------------------------------------------------------------------------ -->
+
+<!-- ## Gallery     -->
+
+<!-- - Robustness reproduction: <https://gitlab.uzh.ch/crsuzh/nhb-replication> -->
+
+<!-- - Handling Missingness in Simulation Studies: <https://github.com/SamCH93/missSim> -->
+
+<!-- - Power priors for replication studies: <https://github.com/SamCH93/ppReplication> -->
+
+------------------------------------------------------------------------
+
+## Abschlussdiskussion
+
+-   Welche Tools könnten am nützlichsten sein?
+-   Welche Tools sind am schwierigsten zu lernen?
+-   Wo sind die größten verbleibenden Hürden?
+------------------------------------------------------------------------
+## Zusammenfassung
+
+- Dynamische Reports + Versionskontrolle + Automatisierung + Containerisierung
+
+    - verbessert **Reproduzierbarkeit**, **Wiederverwendbarkeit**, **Zusammenarbeit**
+    - verleiht der Forschung mehr **Transparenz**, **Glaubwürdigkeit**
+
+. . .
+
+- Es gibt eine **Lernkurve** , aber ...
+
+    - beginnt einfach und lernen Sie **Schritt für Schritt** 💡.
+
+    - die Tools werden **stetig weiterentwickelt** 🚀.
+
+    - investierte Lernzeit kann Ihnen in Zukunft **Zeit sparen** ⏳
+
+    - Fähigkeiten sind **innerhalb/außerhalb von Academia** nützlich 💰 👨‍🔬
+
+
+------------------------------------------------------------------------
+
+## Kontakt
+
+Vielen Dank für die Aufmerksamkeit!
+
+Mail: 
+
+
+
+## Session Info
+```{r}
+sessionInfo()
+```
+------------------------------------------------------------------------
+## Literatur {.smaller}

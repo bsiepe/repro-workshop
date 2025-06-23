@@ -25,6 +25,7 @@ format:
     auto-stretch: false
     embed-resources: true
     progress: true
+    code-line-numbers: true
     incremental: true
     slide-number: true
     title-slide-attributes:
@@ -76,11 +77,11 @@ bibliography: references.bib
 
 Teile dieses Workshops beruhen teils verbatim oder sehr nah auf folgenden Ressourcen, 
 welche ich mit einer CC-BY Lizenz verwende: 
+
 -   [CRS Primer on dynamic reporting](https://doi.org/10.5281/zenodo.7565735)
 -   @Molo2025 
 -   @Peikert2025
--   Teils recht opinionated
-
+-   @wickham2023
 
 TODO Link zu Materialien nochmals.
 
@@ -126,7 +127,7 @@ $\rightarrow$ **Computational reproducibility kann schwierig sein!**
 
 ## Computational Reproducibility
 
-![@Molo2025](img/reproducible.png){.absolute right="0" top="0" height="75"}
+![](img/reproducible.png){.absolute right="0" top="0" height="75"}
 
 ![From @Molo2025, inspired by @peng2011 and @Peikert2021](img/comp-repro-spectrum.png)
 
@@ -189,7 +190,7 @@ Aber reproduzierbare Forschung ist schwierig und kann sich überwältigend anfü
 ::::::: fragment
 :::::: {.columns align="center"}
 :::: {.column width="72%"}
-Kein Grund zur Verzweiflung! Mit jedem Schrit::
+Kein Grund zur Verzweiflung! Mit jedem Schrit:
 
 ::: incremental
 -   seid Ihr einen Schritt näher an reproduzierbarer Forschung
@@ -235,11 +236,17 @@ projekt/
 ::::: callout-note
 ## Praxis-Tipp
 
-Erstellt eine Standard-Ordnerstruktur und kopiert diese für neue Projekte! 
+Verwendet ein .Rproj für jedes neue Projekt in R!
 :::::
 
 ------------------------------------------------------------------------
 
+## R-Project
+
+![@wickham2023](img/r_project.png){fig-align="center" width="75%" height="400"}
+
+
+------------------------------------------------------------------------
 ## Dateinamen
 
 ::: columns
@@ -485,7 +492,7 @@ writeLines(capture.output(sessionInfo()), "session_info.txt")
 
 ![@Molo2025](img/dynamic_reporting_components.png)
 
-TODO Quelle einfügen
+
 
 ------------------------------------------------------------------------
 
@@ -564,4 +571,9 @@ TODO Quelle einfügen
 
 ------------------------------------------------------------------------
 
+## Session Info
+```{r}
+sessionInfo()
+```
+------------------------------------------------------------------------
 ## Literatur {.smaller}

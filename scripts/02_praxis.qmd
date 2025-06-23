@@ -1,0 +1,220 @@
+---
+title: | 
+  Reproduzierbare Forschung \
+  mit R und Quarto -- Praktischer Teil
+subtitle: Workshop für die GSE Wuppertal
+date:  "27. Juni, 2025"
+date-format: long
+author:
+  - Björn S. Siepe
+editor: source
+preview-links: true
+include-in-header:
+  - text: |
+      <style>
+      #title-slide .title {
+        font-size: 1.8em;
+        color: #29487d;
+      }
+      </style>
+format: 
+  revealjs:
+    menu: true
+    pdf: true
+    smaller: true
+    auto-stretch: false
+    embed-resources: true
+    progress: true
+    incremental: true
+    slide-number: true
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    title-slide-attributes:
+      data-background-size: contain
+      data-background-position: bottom
+      data-background-opacity: "0.8"
+bibliography: references.bib
+---
+# Quarto/Markdown Grundlagen
+
+## YAML Header
+-   Enthält Metadaten für das Dokument
+-   Beispiel:
+
+```{.yaml .fragment data-fragment-index=1}
+title: "Using features of dynamic networks to guide treatment selection and outcome prediction"
+subtitle: "Simulation Code"
+```
+```{.yaml .fragment data-fragment-index=2}
+author: 
+ - name: Björn S. Siepe
+   orcid: 0000-0002-9558-4648
+   affiliations: University of Marburg
+date: "`r Sys.Date()`"
+```
+```{.yaml .fragment data-fragment-index=3}
+format:
+  html:
+    toc: true
+    number-sections: true
+    theme: cosmo
+    code-fold: true
+    code-tools: true
+    code-summary: "Show the code"
+    fig-width: 7
+    fig-height: 4.5
+    fig-align: "center"
+    embed-resouces: true
+```
+```{.yaml .fragment data-fragment-index=4}
+execute:
+  message: false
+  warning: false
+  eval: false
+```
+
+## Text
+
+Basierend auf markdown: 
+````markdown
+## Formatierung
+*italic* **bold** ~~strikeout~~ `code`
+superscript^2^ subscript~2~
+[underline]{.underline} [small caps]{.smallcaps}
+
+## Überschriften
+# Erste Ebene
+## Zweite Ebene
+### Dritte Ebene
+
+## Listen
+-   Punkt 1 einer Liste
+-   Punkt 2
+    -   Punkt 2a
+    -   Punkt 2b
+
+1.  Nummerierte Liste Punkt 1
+2.  Punkt 2.
+    Die Zahlen der Liste werden automatisch angepasst.
+    
+## Quotes
+> Gutes Zitat hier.
+````
+
+::: aside
+@wickham2023
+:::
+
+## Code Chunks - Basics
+
+::: columns
+::: {.column width="50%"}
+### Quarto Input
+
+```{{r}}
+mean(c(1, 2, 3, 4, 5))
+```
+
+```{{r}}
+#| label: my-plot
+#| echo: false
+plot(cars)
+```
+
+```{{python}}
+import pandas as pd
+df = pd.DataFrame({'x': [1, 2, 3]})
+print(df)
+```
+
+:::
+
+::: {.column width="50%"}
+### Rendered Output
+```{r}
+mean(c(1, 2, 3, 4, 5))
+```
+
+**Plot (with echo: false):**
+```{r}
+#| echo: false
+plot(cars, main="Speed vs Distance")
+```
+
+**Python output:**
+```
+   x
+0  1
+1  2
+2  3
+```
+:::
+:::
+
+::: aside
+@wickham2023
+:::
+------------------------------------------------------------------------
+## Code Chunks: Optionen
+
+-   Code Chunks können mit verschiedenen Optionen angepasst werden
+    - Namen
+    - Ausführung
+    - Abbildungsoptionen
+
+```{{r}}
+#| label: Beispielchunk
+#| echo: true 
+#| fig-width: 6
+
+```
+
+------------------------------------------------------------------------
+## Code Chunks: Optionen
+
+Verschiedene Optionen können in den Code Chunks verwendet werden:
+
+![@wickham2023](img/chunk-options.png){fig-align="center" width="600"}
+
+
+------------------------------------------------------------------------
+## Inline Code
+
+-   Inline Code wird mit `r` oder `python` in Backticks geschrieben:
+
+```{{markdown}}
+Der Mittelwert der ganzen Zahlen von 1 bis 5 ist  `r mean(c(1, 2, 3, 4, 5))`.
+```
+Ergibt:
+
+Der Mittelwert der ganzen Zahlen von 1 bis 5 ist `r mean(c(1, 2, 3, 4, 5))`.
+
+------------------------------------------------------------------------
+## Übung 1
+
+Zeit zum Üben!
+-   Laden Sie entweder aufgabe_01.qmd herunter oder erstellen Sie eine neue Quarto-Datei.
+-   Personalisieren Sie den YAML-Header.
+-   Schreiben Sie einen kurzen Einleitungstext.
+
+## Abbildungen
+
+## Tabellen
+
+## Externe Grafiken
+
+## Übung 2
+
+## Referenzen
+
+## Rechenintensive Chunks
+
+## Übung 3
+
+
+## Session Info
+```{r}
+sessionInfo()
+```
+------------------------------------------------------------------------
+## Literatur {.smaller}
