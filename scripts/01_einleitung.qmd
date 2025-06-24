@@ -292,6 +292,7 @@ Verwendet ein .Rproj für jedes neue Projekt in R! Erstellt ein Standard-Templat
 ## Code-Dokumentation
 
 ### ❌ Unzureichend:
+::: fragment
 Unklarer Name, keine Dokumentation:
 ```r
 logmlis <- function(x){
@@ -303,8 +304,10 @@ logmlis <- function(x){
   })
 }
 ```
+:::
 
 ### ✅ Besser:
+::: fragment
 Klarer Name, konzise Dokumentation:
 ```r
 log_mean_list <- function(x) {
@@ -316,14 +319,17 @@ log_mean_list <- function(x) {
   return(mean(log(y)))  
 }
 ```
+:::
 
 ---
 
 ## Code-Dokumentation
 
-- Viele unterschiedliche Meinungen
+- Viele unterschiedliche 
+- In der Softwareentwicklung: Oftmals Abneigung gegen zu ausführlicher, repetitiver Dokumentation 
 - In der Wissenschaft: Lieber etwas zu viel als zu wenig
 
+::: fragment
 ::: {.callout-note}
 ## Praxis-Tipp
 Nach @Peikert2025: 
@@ -332,18 +338,23 @@ Nach @Peikert2025:
 2. Was einfach ist, braucht nur wenig Dokumentation.
 3. Was konsistent ist, muss nur einmal dokumentiert werden.
 :::
+:::
 
 ---
 
 ## Dateipfade
 
 ### ❌ Absoluter Pfad (schlecht):
+
+::: fragment
 ```r         
 daten <- read.csv("C:/Users/Maria/Desktop/Masterarbeit/daten.csv") 
 ```
 **Problem:** Funktioniert nur auf Ihrem Computer!
+:::
 
 ### ✅ Relativer Pfad (gut):
+::: fragment
 ```r        
 daten <- read.csv("data/raw/fragebogen-daten.csv") 
 ```
@@ -353,18 +364,24 @@ Noch besser: Verwendung des `here` packages (funktioniert mit verschiedenen Syst
 library(here)
 daten <- read.csv(here("data", "raw", "fragebogen-daten.csv"))
 ```
+:::
+
 ------------------------------------------------------------------------
 
 
 ## Aufteilung in verschiedene Skripte
 
 ### ❌ Ein großes Skript:
+::: fragment
 ```r
 # complete_analysis.R (500+ lines)
 # Data import, cleaning, analysis, plots, export...
 ```
+:::
 
 ### ✅ Modulare Aufteilung:
+
+::: fragment
 - `01_data_import.R` - Rohdaten laden
 - `02_data_cleaning.R` - Präprozessierung
 - `03_descriptive_analysis.R` - Deskriptive Statistiken
@@ -373,12 +390,13 @@ daten <- read.csv(here("data", "raw", "fragebogen-daten.csv"))
 - `06_export.R` - Export
 
 **Vorteile:** Übersichtlicher, leichter zu debuggen, bessere Zusammenarbeit
-
+::: 
 ---
 
 ## Funktionsbasiertes Programmieren
 
 ### ❌ Code-Wiederholung:
+::: fragment
 ```r
 # Standardization for variable 1
 data$var1_std <- (data$var1 - mean(data$var1, na.rm = TRUE)) / 
@@ -390,37 +408,41 @@ data$var2_std <- (data$var2 - mean(data$var2, na.rm = TRUE)) /
 
 # Standardization for variable 3...
 ```
-
+::: 
 ### ✅ Funktion erstellen:
+::: fragment
 ```r
 standardize_variable <- function(x) {
   # Z-standardization of a numeric variable
   (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
 }
 
-# Application
+# Anwendung
 data$var1_std <- standardize_variable(data$var1)
 data$var2_std <- standardize_variable(data$var2)
 data$var3_std <- standardize_variable(data$var3)
 
-# Or even better
+# Oder besser:
 data <- data |>
   mutate(across(starts_with("var"), standardize_variable))
 ```
-
+:::
 ---
 
 ## Vermeiden von "magic numbers"
 
 ### ❌ Unklare Zahlen im Code:
+::: fragment
 ```r
 # What do these numbers mean?
 clean_data <- data[data$age >= 18 & data$age <= 65, ]
 final_data <- clean_data[clean_data$score > 2.5, ]
 significant <- results[results$p_value < 0.05, ]
 ```
+:::
 
 ### ✅ Benannte Konstanten:
+::: fragment
 ```r
 # Clear definitions at the beginning of the script
 MIN_AGE <- 18
@@ -436,6 +458,7 @@ significant <- results[results$p_value < ALPHA_LEVEL, ]
 ```
 
 **Vorteil:** Code wird selbsterklärend und leichter anpassbar
+:::
 
 ---
 
@@ -591,7 +614,7 @@ writeLines(capture.output(sessionInfo()), "session_info.txt")
 
 ## Session Info
 ```{r}
-sessionInfo()
+pander::pander(sessionInfo())
 ```
 ------------------------------------------------------------------------
 ## Literatur {.smaller}
