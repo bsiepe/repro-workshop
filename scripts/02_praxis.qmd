@@ -26,6 +26,7 @@ format:
     embed-resources: true
     progress: true
     incremental: true
+    standalone: true
     slide-number: true
     code-block-bg: true
     code-block-border-left: "#31BAE9"
@@ -300,23 +301,173 @@ knitr::include_graphics("images/my_plot.png")
 
 ## Tabellen
 
-TODO
+-   Tabellen können mit vielen Paketen erstellt werden, z.B. `kable`, `gt`, `flextable` oder `pander`.
+-   Beispiel mit `kable`:
+```{r}
+#| echo: true
+
+data("USArrests")
+library(knitr)
+kable(head(USArrests), caption = "Erste 6 Zeilen des USArrests Datensatzes") 
+``` 
+
+## Tabellen: Formatierung
+
+## Tabellen-Export für Manuskripte
+-   Tabellen können in verschiedenen Formaten exportiert werden, z.B. LaTeX, HTML oder Word.
+-   Beispiel mit `flextable` für eine APA-konforme Tabelle:
+```{r}
+#| echo: true
+#| eval: false
+library(flextable)
+tabelle <- flextable(head(USArrests))
+
+tabelle |>
+  save_as_docx("USArrests_table.docx", path = here::here("tables"))
+``` 
 
 ## Übung 2
 
-TODO
+-   Verwenden Sie entweder Ihr existierendes Quarto-Dokument oder laden Sie `aufgabe_02.qmd` herunter.
+-   Fügen Sie eine Abbildung hinzu, die den Zusammenhang zwischen "UrbanPop" und "Assault" im USArrests Datensatz zeigt.
+     - Ändern Sie die Größe der Abbildung. 
+     - Optional: Speichern Sie die Abbildung und laden Sie als externes Bild ein.
+-   Fügen Sie eine Tabelle hinzu.
+-   Versuchen Sie, die Tabelle schöner zu formatieren.
 
 ## Referenzen
 
-TODO
+-   Referenzen können mit BibTeX-Dateien eingebunden werden. 
+-   Als Beispiel verwenden wir `referenzen.bib`. Dies müssen wir im YAML-Header angeben:
+````yaml
+bibliography: referenzen.bib
+csl: apa.csl  # Optional: Style
+````
+
+- Ein Zitat kann dann so aussehen: 
+  - `[@wickham2016]` → (Wickham, 2016)
+  - `@wickham2016` → Wickham (2016)
+  - `[@wickham2016; @r2023]` → (Wickham, 2016; R Core Team, 2023)
+
+
+## BibTeX Beispiel
+
+Eine typische `referenzen.bib` Datei sieht so aus:
+
+```bibtex
+@book{wickham2016,
+  title = {R for Data Science},
+  author = {Hadley Wickham and Garrett Grolemund},
+  year = {2016},
+  publisher = {O'Reilly Media},
+  isbn = {978-1491910399}
+}
+
+@manual{r2023,
+  title = {R: A Language and Environment for Statistical Computing},
+  author = {{R Core Team}},
+  organization = {R Foundation for Statistical Computing},
+  address = {Vienna, Austria},
+  year = {2023},
+  url = {https://www.R-project.org/}
+}
+```
+## Verschiedene Zitierweisen
+
+| Syntax | Ausgabe | Verwendung |
+|--------|---------|------------|
+| `[@autor2023]` | (Autor, 2023) | Normale Klammerzitate |
+| `@autor2023` | Autor (2023) | Autor als Teil des Satzes |
+| `[@autor2023, S. 15]` | (Autor, 2023, S. 15) | Mit Seitenzahl |
+| `[-@autor2023]` | (2023) | Nur Jahr, ohne Autor |
+| `[@autor2023; @autor2024]` | (Autor, 2023, 2024) | Mehrere Quellen |
+
+## Referenzen hinzufügen
+
+**Manuell in der BibTeX-Datei:**
+- Direkt in `referenzen.bib` editieren
+- Google Scholar: "Zitieren" → "BibTeX" kopieren (und DOI hinzufügen)
+
+**Zotero Integration:**
+- Better BibTeX Plugin installieren
+- Auto-Export zu `.bib` Datei
+- Sync zwischen Zotero und Quarto
+
+**RStudio Visual Editor:**
+- `Insert` → `Citation` 
+- Automatisches Hinzufügen zur `.bib` Datei
+
+## Literaturverzeichnis
+
+- Wird automatisch am Ende des Dokuments eingefügt
+- Nur zitierte Quellen werden angezeigt
+- Anpassung der Position:
+
+````markdown
+# Literatur
+::: {#refs}
+:::
+
+# Anhang
+Weiterer Inhalt nach dem Literaturverzeichnis...
+````
+
 
 ## Rechenintensive Chunks
 
-TODO
+-   Teilweise möchten wir Code nicht ausführen, wenn das Dokument gerendert wird
+    -  z.B. bei rechenintensiven Operationen
+    -  Ausführung des Codes auf einem Server
+    -  oder bei Zufallsimulationen
+    -  oder wenn wir nur den Code zeigen wollen
+-   Beispiel:
+```{r}
+#| label: bootstrap-example
+#| echo: true
+#| eval: false
+
+data("USArrests")
+
+# Bootstrap durchführen, um Konfidenzintervall einer Regression zu schätzen
+n_boot <- 1000
+bootstrap_results <- numeric(n_boot)
+
+# Warnung: Dieser Code dauert ca. 30 Sekunden!
+system.time({
+  for(i in 1:n_boot) {
+    # Zufälliges Sampling mit Zurücklegen
+    boot_sample <- sample(nrow(USArrests), replace = TRUE)
+    boot_data <- USArrests[boot_sample, ]
+    
+    
+    boot_model <- lm(Murder ~ UrbanPop, data = boot_data)
+    # Extrahieren der Slope
+    bootstrap_results[i] <- coef(boot_model)[2]  
+  }
+})
+
+# Konfidenzintervall berechnen
+ci_lower <- quantile(bootstrap_results, 0.025)
+ci_upper <- quantile(bootstrap_results, 0.975) 
+
+
+``` 
+
 
 ## Übung 3
 
-TODO
+
+-   Arbeiten sie entweder in Ihrer existierenden Quarto- Datei weiter oder verwenden Sie `aufgabe_03.qmd`.
+-   Fügen Sie eine Referenz zu einem Buch oder Artikel hinzu, den Sie interessant finden. 
+-   Lassen Sie das Literaturverzeichnis am Ende des Dokuments erscheinen.
+-   Führen Sie eine Regression auf den USArrests Datensatz durch und speichern Sie das Ergebnis. Sorgen Sie dafür, dass der Code nicht ausgeführt wird, wenn das Dokument gerendert wird. 
+-   Optional: Versuchen Sie, das Dokument so zu formatieren, dass es möglichst nah an einen echten Artikel herankommt.
+
+
+## Kleine Zusatztips
+
+- `.qmd` zu `.r` umwandeln mit `knitr::`
+
 
 ## Session Info
 ```{r}

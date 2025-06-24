@@ -24,6 +24,7 @@ format:
     smaller: true
     auto-stretch: false
     embed-resources: true
+    standalone: true
     progress: true
     incremental: true
     slide-number: true
@@ -235,6 +236,11 @@ make docker-report
 :::
 ::::
 ::::::
+
+## Zusätzliches Thema: Code Reviews
+
+-   **Code Reviews** sind eine Methode, um die Qualität von Code zu verbessern
+-   TODO
 
 ------------------------------------------------------------------------
 

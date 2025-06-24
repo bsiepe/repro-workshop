@@ -24,6 +24,7 @@ format:
     smaller: true
     auto-stretch: false
     embed-resources: true
+    standalone: true
     progress: true
     code-line-numbers: true
     incremental: true
@@ -100,7 +101,7 @@ Eine sehr einfache Definition:
 :::
 ------------------------------------------------------------------------
 
-## Example
+## Beispiel
 
 ![](img/samuel2024.png){fig-align="center" width="75%"}
 
@@ -116,10 +117,24 @@ $\rightarrow$ **Computational reproducibility kann schwierig sein!**
 :::
 ------------------------------------------------------------------------
 
+## Beispiel: Nicht alles ist schlecht
+
+-   Studie zu 110 Artikeln in Ökonomie und Politikwissenschaft
+-   Über 85% der Artikel konnten reproduziert werden
+-   Etwa 70% der Befunde waren robust gegenüber Alternativanalysen
+
+::: fragment
+>  This is likely influenced by our approach of targeting newer studies and nine (out of 12)
+outlets internally conducting computational reproducibility checks.
+:::
+
+::: fragment
+![@brodeur2024](img/brodeur2025.png){fig-align="center" width="65%" height="400"}
+:::
+------------------------------------------------------------------------
 
 ## Terminologie
 
-<br>
 
 ![@theturingwaycommunity2022](img/turingway_reproducible_matrix.jpg){fig-align="center" width="75%"}
 
@@ -213,15 +228,18 @@ Kein Grund zur Verzweiflung! Mit jedem Schrit:
 ## Projektstruktur
 ### Vorher: Chaos 📁
 
+::: fragment
 ```         
 -   Paper_final_wirklich_final.docx 
 -   daten.xlsx code_alt.R 
 -   code_neu_funktioniert.R 
 -   plot1.png 
 ```
+:::
 
 ### Nachher: Ordnung ✨
 
+::: fragment
 ```         
 projekt/
 ├── data/
@@ -232,21 +250,23 @@ projekt/
 └── README.md
 
 ```
+:::
 
+::: fragment
 ::::: callout-note
 ## Praxis-Tipp
 
-Verwendet ein .Rproj für jedes neue Projekt in R!
+Verwendet ein .Rproj für jedes neue Projekt in R! Erstellt ein Standard-Template für neue Projekte.
 :::::
-
+::: 
 ------------------------------------------------------------------------
 
 ## R-Project
 
 ![@wickham2023](img/r_project.png){fig-align="center" width="75%" height="400"}
 
-
 ------------------------------------------------------------------------
+
 ## Dateinamen
 
 ::: columns
@@ -335,8 +355,6 @@ daten <- read.csv(here("data", "raw", "fragebogen-daten.csv"))
 ```
 ------------------------------------------------------------------------
 
-
----
 
 ## Aufteilung in verschiedene Skripte
 
