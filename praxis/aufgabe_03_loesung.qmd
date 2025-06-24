@@ -1,0 +1,171 @@
+---
+title: "Analyse der US-Kriminalitätsstatistiken: Ein reproduzierbarer Ansatz"
+subtitle: "Untersuchung von Gewaltverbrechen in den amerikanischen Bundesstaaten (1973)"
+author:
+  - name: "Max Mustermann"
+date: "`r Sys.Date()`"
+params:
+  rerun: false  # Parameter um große Analysen neu zu berechnen
+format:
+  html:
+    toc: true
+    toc-float: true
+    number-sections: true
+    theme: cosmo
+    embed-resources: true
+execute:
+  cache: true
+bibliography: referenzen.bib
+---
+
+```{r setup, include=FALSE}
+# Daten laden für Inline-Code
+data("USArrests")
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(flextable)
+```
+
+# Abstract
+
+Diese Studie analysiert den **USArrests Datensatz** aus dem Jahr 1973, um Zusammenhänge zwischen Urbanisierung und verschiedenen Gewaltverbrechen in den amerikanischen Bundesstaaten zu untersuchen. Mittels *deskriptiver Statistiken* und *Regressionsanalysen* werden die Beziehungen zwischen dem Anteil der Stadtbevölkerung und den Raten von Mord, Körperverletzung und Vergewaltigung analysiert.
+
+# Einleitung
+
+Der **USArrests Datensatz** ist eine klassische Sammlung von Kriminalitätsstatistiken aus den USA des Jahres 1973. Er enthält Informationen über verschiedene Gewaltverbrechen und den Urbanisierungsgrad für alle 50 amerikanischen Bundesstaaten.
+
+Diese Analyse verwendet moderne statistische Methoden und wurde vollständig in R durchgeführt. Die Verwendung reproduzierbarer Workflows ist essentiell für die moderne Datenanalyse.
+
+Die zentralen Forschungsfragen dieser Analyse sind:
+
+1. Wie hängen Urbanisierung und Mordraten zusammen?
+2. Gibt es Unterschiede in den Kriminalitätsmustern zwischen stark und schwach urbanisierten Staaten?
+3. Welche Faktoren erklären am besten die Variation in den Gewaltverbrechensraten?
+
+# Methoden
+
+Für diese Analyse wurde @R2025 verwendet. 
+
+```{r descriptive-table}
+#| tbl-cap: "Deskriptive Statistiken des USArrests Datensatzes"
+
+USArrests |>
+  summarise(
+    across(everything(), list(
+      Mittelwert = ~ round(mean(.x), 1),
+      Minimum = ~ round(min(.x), 1),
+      Maximum = ~ round(max(.x), 1)
+    ))
+  ) |>
+  tidyr::pivot_longer(everything(), names_to = "Variable", values_to = "Wert") |>
+  tidyr::separate(Variable, into = c("Variable", "Statistik"), sep = "_") |>
+  tidyr::pivot_wider(names_from = Statistik, values_from = Wert) |>
+  flextable() |>
+  theme_vanilla() |>
+  autofit()
+```
+
+# Ergebnisse
+
+## Visualisierung
+
+```{r urbanpop-assault-plot}
+#| fig-cap: "Zusammenhang zwischen Urbanisierung und Körperverletzungsrate"
+#| fig-width: 10
+#| fig-height: 6
+
+ggplot(USArrests, aes(x = UrbanPop, y = Assault)) +
+  geom_point(color = "#56B1F7", size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "#132B43") +
+  labs(
+    title = "Zusammenhang zwischen Urbanisierung und Körperverletzungsrate",
+    subtitle = "USArrests Datensatz (1973)",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Körperverletzung pro 100.000 Einwohner"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(size = 14, face = "bold")
+  )
+```
+
+## Regressionsanalyse
+
+```{r bootstrap-regression}
+#| echo: true
+#| cache: true
+
+# Bootstrap-Analyse für robuste Konfidenzintervalle
+# Drei verschiedene Ansätze, um rechenintensive Analysen zu handhaben:
+
+# Ansatz 1: Parameter verwenden
+if(!file.exists("bootstrap_results.RDS")) {
+  
+  set.seed(123)
+  n_boot <- 1000
+  bootstrap_results <- matrix(NA, nrow = n_boot, ncol = 2)
+  
+  cat("Bootstrap-Analyse wird durchgeführt... (ca. 10 Sekunden)\n")
+  
+  for(i in 1:n_boot) {
+    boot_data <- USArrests[sample(nrow(USArrests), replace = TRUE), ]
+    model <- lm(Murder ~ UrbanPop, data = boot_data)
+    bootstrap_results[i, ] <- coef(model)
+  }
+  
+  # Bootstrap-Konfidenzintervalle berechnen
+  bootstrap_ci <- apply(bootstrap_results, 2, quantile, probs = c(0.025, 0.975))
+  colnames(bootstrap_ci) <- c("Intercept", "UrbanPop")
+  
+  cat("Bootstrap-Analyse abgeschlossen!\n")
+  
+  saveRDS(bootstrap_ci, "bootstrap_results.RDS")
+
+} else {
+  bootstrap_ci <- readRDS("bootstrap_results.RDS")  
+  cat("Bootstrap-Ergebnisse aus Cache geladen.\n")
+}
+
+# Ergebnisse anzeigen
+print("95% Bootstrap-Konfidenzintervalle:")
+print(bootstrap_ci)
+```
+
+
+**Alternative Ansätze für rechenintensive Analysen:**
+
+Den Cache-Befehl nutzen: 
+```{r alternative-approaches}
+#| echo: true
+#| eval: false
+#| cache: true
+# Ansatz 2: Caching mit bedingter Ausführung
+
+  # ... Bootstrap-Code hier ...
+
+```
+
+Einen globalen Parameter (etwa "rerun genannt") im YAML-Header definineren:
+
+```{yaml}
+params:
+  rerun: false  # define parameter if all large analyses should be rerun
+```
+
+Dieser kann dann in den R-Code eingebaut werden:
+```{r rerun-parameter}
+#| eval: !expr params$rerun
+
+#... Bootstrap-Code hier ...
+```
+
+# Diskussion
+
+Die Analyse zeigt interessante Zusammenhänge zwischen den verschiedenen Kriminalitätsvariablen. 
+
+
+# Literatur
+
+::: {#refs}
+:::

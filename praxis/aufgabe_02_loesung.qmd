@@ -1,0 +1,141 @@
+---
+title: "Analyse der US-Kriminalitätsstatistiken: Ein reproduzierbarer Ansatz"
+subtitle: "Untersuchung von Gewaltverbrechen in den amerikanischen Bundesstaaten (1973)"
+author:
+  - name: "Max Mustermann"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-float: true
+    number-sections: true
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r setup, include=FALSE}
+# Daten laden für Inline-Code
+data("USArrests")
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(flextable)
+```
+
+# Abstract
+
+Diese Studie analysiert den **USArrests Datensatz** aus dem Jahr 1973, um Zusammenhänge zwischen Urbanisierung und verschiedenen Gewaltverbrechen in den amerikanischen Bundesstaaten zu untersuchen. Mittels *deskriptiver Statistiken* und *Regressionsanalysen* werden die Beziehungen zwischen dem Anteil der Stadtbevölkerung und den Raten von Mord, Körperverletzung und Vergewaltigung analysiert.
+
+# Einleitung
+
+Der **USArrests Datensatz** ist eine klassische Sammlung von Kriminalitätsstatistiken aus den USA des Jahres 1973. Er enthält Informationen über verschiedene Gewaltverbrechen und den Urbanisierungsgrad für alle 50 amerikanischen Bundesstaaten.
+
+Die zentralen Forschungsfragen dieser Analyse sind:
+
+1. Wie hängen Urbanisierung und Mordraten zusammen?
+2. Gibt es Unterschiede in den Kriminalitätsmustern zwischen stark und schwach urbanisierten Staaten?
+3. Welche Faktoren erklären am besten die Variation in den Gewaltverbrechensraten?
+
+# Erste Ergebnisse
+
+## Deskriptive Kennwerte
+
+Die Mordrate variiert zwischen `r range(USArrests$Murder)[1]` und `r range(USArrests$Murder)[2]` pro 100.000 Einwohner, mit einem Durchschnitt von `r round(mean(USArrests$Murder), 1)`. Der Anteil der städtischen Bevölkerung reicht von `r min(USArrests$UrbanPop)`% bis `r max(USArrests$UrbanPop)`%.
+
+Die höchste durchschnittliche Kriminalitätsrate zeigt sich bei `r names(USArrests)[which.max(sapply(USArrests, mean))]` mit einem Mittelwert von `r round(max(sapply(USArrests, mean)), 1)`.
+
+```{r descriptive-table}
+#| tbl-cap: "Deskriptive Statistiken des USArrests Datensatzes"
+
+# Einfache Tabelle mit kable
+USArrests |>
+  summarise(
+    across(everything(), list(
+      Mittelwert = ~ round(mean(.x), 1),
+      Minimum = ~ round(min(.x), 1),
+      Maximum = ~ round(max(.x), 1)
+    ))
+  ) |>
+  tidyr::pivot_longer(everything(), names_to = "Variable", values_to = "Wert") |>
+  tidyr::separate(Variable, into = c("Variable", "Statistik"), sep = "_") |>
+  tidyr::pivot_wider(names_from = Statistik, values_from = Wert) |>
+  kable()
+```
+
+## Erste Eindrücke
+
+Die Daten zeigen eine *erhebliche Variation* zwischen den amerikanischen Bundesstaaten in Bezug auf **Gewaltverbrechensraten**. Besonders auffällig ist die große Spannweite bei der Variable `Murder`, die von sehr niedrigen bis zu sehr hohen Werten reicht. Die `UrbanPop` Variable zeigt, dass die Bundesstaaten sehr unterschiedlich urbanisiert sind. Diese Unterschiede bieten eine gute Grundlage für weitere statistische Analysen zur Untersuchung möglicher Zusammenhänge zwischen Urbanisierung und Kriminalität.
+
+## Zusammenhang zwischen Urbanisierung und Körperverletzung
+
+```{r urbanpop-assault-plot}
+#| fig-cap: "Zusammenhang zwischen Urbanisierung und Körperverletzungsrate"
+#| fig-width: 10
+#| fig-height: 6
+
+ggplot(USArrests, aes(x = UrbanPop, y = Assault)) +
+  geom_point(color = "#56B1F7", size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "#132B43") +
+  labs(
+    title = "Zusammenhang zwischen Urbanisierung und Körperverletzungsrate",
+    subtitle = "USArrests Datensatz (1973)",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Körperverletzung pro 100.000 Einwohner"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(size = 14, face = "bold")
+  )
+```
+
+Die Abbildung zeigt einen **positiven Zusammenhang** zwischen dem Urbanisierungsgrad und der Körperverletzungsrate. Bundesstaaten mit einem höheren Anteil städtischer Bevölkerung weisen tendenziell höhere Raten von Körperverletzungsdelikten auf. Die Regressionslinie deutet auf einen *moderaten linearen Zusammenhang* hin, wobei einige Ausreißer erkennbar sind.
+
+## Detaillierte Statistiken
+
+```{r improved-table}
+#| tbl-cap: "Verbesserte deskriptive Statistiken"
+
+# Schöner formatierte Tabelle mit flextable
+USArrests |>
+  summarise(
+    across(everything(), list(
+      Mittelwert = ~ round(mean(.x), 1),
+      Median = ~ round(median(.x), 1),
+      Minimum = ~ round(min(.x), 1),
+      Maximum = ~ round(max(.x), 1),
+      Standardabweichung = ~ round(sd(.x), 1)
+    ))
+  ) |>
+  tidyr::pivot_longer(everything(), names_to = "Variable", values_to = "Wert") |>
+  tidyr::separate(Variable, into = c("Variable", "Statistik"), sep = "_") |>
+  tidyr::pivot_wider(names_from = Statistik, values_from = Wert) |>
+  mutate(
+    Variable = case_when(
+      Variable == "Murder" ~ "Mordrate",
+      Variable == "Assault" ~ "Körperverletzung", 
+      Variable == "UrbanPop" ~ "Urbanisierung (%)",
+      Variable == "Rape" ~ "Vergewaltigung",
+      TRUE ~ Variable
+    )
+  ) |>
+  flextable() |>
+  theme_vanilla() |>
+  autofit() |>
+  set_header_labels(
+    Variable = "Variable",
+    Mittelwert = "M",
+    Median = "Mdn", 
+    Minimum = "Min",
+    Maximum = "Max",
+    Standardabweichung = "SD"
+  )
+```
+
+**Externe Abbildung (Optional)**
+
+```{r save-plot, eval=FALSE}
+# Plot speichern
+ggsave("urbanpop_assault_plot.png", width = 10, height = 6, dpi = 300)
+```
+
+![Zusammenhang zwischen Urbanisierung und Körperverletzung](urbanpop_assault_plot.png){width=80%}
