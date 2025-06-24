@@ -1,5 +1,42 @@
 ---
-title: "aufgabe_01"
-format: html
+title: "Analyse der US-Kriminalitätsstatistiken: Ein reproduzierbarer Ansatz"
+subtitle: "Untersuchung von Gewaltverbrechen in den amerikanischen Bundesstaaten (1973)"
+author: 
+  - name: "Name"
+date: "Heute"
+format:
+  html:
+    toc: true
+    toc-float: true
+    number-sections: true
+    theme: cosmo
+    embed-resources: true
 ---
+
+# Abstract
+
+Diese Studie analysiert den USArrests Datensatz aus dem Jahr 1973, um Zusammenhänge zwischen Urbanisierung und verschiedenen Gewaltverbrechen in den amerikanischen Bundesstaaten zu untersuchen. Mittels deskriptiver Statistiken und Regressionsanalysen werden die Beziehungen zwischen dem Anteil der Stadtbevölkerung und den Raten von Mord, Körperverletzung und Vergewaltigung analysiert. 
+
+
+# Einleitung
+
+Der USArrests Datensatz ist eine klassische Sammlung von Kriminalitätsstatistiken aus den USA des Jahres 1973. Er enthält Informationen über verschiedene Gewaltverbrechen und den Urbanisierungsgrad für alle 50 amerikanischen Bundesstaaten.
+
+Die zentralen Forschungsfragen dieser Analyse sind: Wie hängen Urbanisierung und Mordraten zusammen? 2. Gibt es Unterschiede in den Kriminalitätsmustern zwischen stark und schwach urbanisierten Staaten? 3. Welche Faktoren erklären am besten die Variation in den Gewaltverbrechensraten?
+
+**TODO: Formatieren Sie diese Forschungsfragen als eine Liste**
+
+
+# Erste Ergebnisse
+
+## Deskriptive Kennwerte
+
+**TODO: Vervollständigen Sie die folgenden Sätze mit Inline-Code:**
+
+Die Mordrate variiert zwischen __ und __ pro 100.000 Einwohner, mit einem Durchschnitt von __. Der Anteil der städtischen Bevölkerung reicht von __%  bis __%.
+
+Die höchste durchschnittliche Kriminalitätsrate zeigt sich bei __ mit einem Mittelwert von __.
+
+
+**TODO: Schreiben Sie einen kurzen Absatz (3-4 Sätze) über Ihre ersten Eindrücke der Daten. Verwenden Sie dabei verschiedene Textformatierungen:**
 

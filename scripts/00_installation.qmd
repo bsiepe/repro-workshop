@@ -1,5 +1,6 @@
 ---
-title: "Installationshilfe" 
+title: "Reproduzierbare Forschung mit R" 
+subtitle: "Installation und Vorbereitung"
 author:
   - name: "Björn S. Siepe"
     orcid: 0000-0002-9558-4648
@@ -23,7 +24,7 @@ install.packages(c("quarto", "tidyverse", "flextable"))
 
 ### LateX zum Rendern von PDFs (optional)
 
-Um Dokumente im PDF-Format darzustellen, muss ``Quarto`` auf ``LaTeX`` zugreifen können. Wenn Sie ```LaTeX`` noch nicht installiert haben, können Sie die leichtgewichtige Version ``TinyTex`` installieren, indem Sie das Folgende in Ihr **Terminal** eingeben:
+Um Dokumente im PDF-Format darzustellen, muss ``Quarto`` auf ``LaTeX`` zugreifen können. Wenn Sie ``LaTeX`` noch nicht installiert haben, können Sie die leichtgewichtige Version ``TinyTex`` installieren, indem Sie das Folgende in Ihr **Terminal** eingeben:
 
 ```bash
 quarto install tinytex
@@ -34,7 +35,7 @@ Weitere Anleitungen zu ``LaTeX``, finden Sie hier: <https://quarto.org/docs/outp
 
 ## Alternative 1: andere Entwicklungsumgebungen (optional)
 
-Im Workshop werden wir R und RStudio zur Demonstration verwenden, aber ````Quarto`` kann auch mit Python anstelle von R und mit VS Code, Jupyter Notebooks oder anderen Entwicklungsumgebungen anstelle von RStudio verwendet werden. Die folgende Seite ist ein guter Startpunkt: <https://quarto.org/docs/get-started/hello/vscode.html>
+Im Workshop werden wir R und RStudio zur Demonstration verwenden, aber ``Quarto`` kann auch mit Python anstelle von R und mit VS Code, Jupyter Notebooks oder anderen Entwicklungsumgebungen anstelle von RStudio verwendet werden. Die folgende Seite ist ein guter Startpunkt: <https://quarto.org/docs/get-started/hello/vscode.html>
 
 ## Alternative 2: Arbeiten in der Posit-Cloud (optional)
 

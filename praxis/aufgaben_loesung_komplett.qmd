@@ -1,0 +1,330 @@
+---
+title: "Analyse der US-Kriminalitätsstatistiken: Ein reproduzierbarer Ansatz"
+subtitle: "Untersuchung von Gewaltverbrechen in den amerikanischen Bundesstaaten (1973)"
+author: 
+  - name: "Max Mustermann"
+    orcid: "0000-0000-0000-0000"
+    affiliations: "Bergische Universität Wuppertal, Deutschland"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-float: true
+    number-sections: true
+    theme: cosmo
+    code-fold: true
+    code-tools: true
+    code-summary: "Code anzeigen"
+    fig-width: 8
+    fig-height: 6
+    fig-align: "center"
+    embed-resources: true
+execute:
+  message: false
+  warning: false
+  cache: true
+bibliography: referenzen.bib
+---
+
+# Abstract
+
+Diese Studie analysiert den **USArrests Datensatz** aus dem Jahr 1973, um Zusammenhänge zwischen Urbanisierung und verschiedenen Gewaltverbrechen in den amerikanischen Bundesstaaten zu untersuchen. Mittels *deskriptiver Statistiken* und *Regressionsanalysen* werden die Beziehungen zwischen dem Anteil der Stadtbevölkerung und den Raten von Mord, Körperverletzung und Vergewaltigung analysiert. Die Ergebnisse zeigen signifikante Korrelationen zwischen Urbanisierung und verschiedenen Kriminalitätsformen. Der Datensatz umfasst `r nrow(USArrests)` Bundesstaaten mit `r ncol(USArrests)` verschiedenen Variablen.
+
+# Einleitung
+
+Der **USArrests Datensatz** ist eine klassische Sammlung von Kriminalitätsstatistiken aus den USA des Jahres 1973. Er enthält Informationen über verschiedene Gewaltverbrechen und den Urbanisierungsgrad für alle 50 amerikanischen Bundesstaaten.
+
+Die zentralen Forschungsfragen dieser Analyse sind:
+
+1. Wie hängen Urbanisierung und Mordraten zusammen?
+2. Gibt es Unterschiede in den Kriminalitätsmustern zwischen stark und schwach urbanisierten Staaten?
+3. Welche Faktoren erklären am besten die Variation in den Gewaltverbrechensraten?
+
+Der Datensatz enthält insgesamt `r nrow(USArrests)` Beobachtungen (Bundesstaaten) mit Informationen über die Mordrate (pro 100.000 Einwohner), Körperverletzungsrate, Vergewaltigungsrate und den Anteil der städtischen Bevölkerung.
+
+# Methoden
+
+Für diese Analyse wurde `r R.version.string` verwendet [@R2025]. Die statistischen Analysen wurden mit folgenden R-Paketen durchgeführt:
+
+- **ggplot2** für Datenvisualisierung
+- **knitr** für Tabellenerstellung  
+- **dplyr** für Datenmanipulation
+- **broom** für die Aufbereitung von Regressionserergebnissen
+
+```{r setup}
+#| echo: true
+#| message: false
+
+# Pakete laden
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(broom)
+library(flextable)
+library(pander)
+
+# Seed für Reproduzierbarkeit setzen
+set.seed(35037)
+
+# Daten laden
+data("USArrests")
+
+# Überblick über die Daten
+str(USArrests)
+```
+
+Die Datenanalyse umfasste deskriptive Statistiken, Korrelationsanalysen und multiple lineare Regression. Bootstrap-Verfahren wurden verwendet, um robuste Konfidenzintervalle für die Regressionskoeffizienten zu schätzen.
+
+# Ergebnisse
+
+## Deskriptive Statistiken
+
+```{r descriptive-stats}
+#| echo: true
+#| tbl-cap: "Deskriptive Statistiken des USArrests Datensatzes"
+
+# Deskriptive Statistiken berechnen
+desc_stats <- USArrests |>
+  summarise(
+    across(everything(), list(
+      Minimum = ~ round(min(.x), 2),
+      Mittelwert = ~ round(mean(.x), 2),
+      Median = ~ round(median(.x), 2),
+      Maximum = ~ round(max(.x), 2),
+      SD = ~ round(sd(.x), 2)
+    ), .names = "{.col}_{.fn}")
+  ) |>
+  tidyr::pivot_longer(everything(), names_to = "Variable", values_to = "Wert") |>
+  tidyr::separate(Variable, into = c("Variable", "Statistik"), sep = "_") |>
+  tidyr::pivot_wider(names_from = Statistik, values_from = Wert)
+
+# Schöne Tabelle erstellen
+desc_stats |>
+  flextable() |>
+  set_header_labels(
+    Variable = "Variable",
+    Minimum = "Min",
+    Mittelwert = "M",
+    Median = "Mdn",
+    Maximum = "Max",
+    SD = "SD"
+  ) |>
+  theme_vanilla() |>
+  autofit()
+```
+
+Die Mordrate variiert zwischen `r range(USArrests$Murder)[1]` und `r range(USArrests$Murder)[2]` pro 100.000 Einwohner, mit einem Durchschnitt von `r round(mean(USArrests$Murder), 1)`. Der Anteil der städtischen Bevölkerung reicht von `r min(USArrests$UrbanPop)`% bis `r max(USArrests$UrbanPop)`%.
+
+## Visualisierung der Zusammenhänge
+
+```{r main-plot}
+#| fig-cap: "Zusammenhang zwischen Urbanisierung und Mordrate nach Bundesstaaten"
+#| echo: true
+
+ggplot(USArrests, aes(x = UrbanPop, y = Murder, color = Assault, size = Rape)) +
+  geom_point(alpha = 0.8) +
+  geom_smooth(method = "lm", se = TRUE, color = "#132B43", size = 0.8) +
+  scale_color_gradient(low = "#56B1F7", high = "#132B43", name = "Körperverletzung\n(pro 100k)") +
+  scale_size_continuous(name = "Vergewaltigung\n(pro 100k)", range = c(2, 6)) +
+  labs(
+    title = "Zusammenhang zwischen Urbanisierung und Mordrate",
+    subtitle = "USArrests Datensatz (1973) - Größe = Vergewaltigungsrate",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Mordrate pro 100.000 Einwohner",
+    caption = "Quelle: USArrests Dataset, McNeil (1977)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    legend.position = "right"
+  )
+```
+
+## Verteilungen der Kriminalitätsvariablen
+
+```{r distribution-plots}
+#| code-fold: true
+
+# Mordrate
+p1 <- ggplot(USArrests, aes(x = Murder)) +
+  geom_histogram(bins = 15, fill = "#56B1F7", alpha = 0.7, color = "white") +
+  geom_vline(aes(xintercept = mean(Murder)), color = "#132B43", linetype = "dashed", size = 1) +
+  labs(
+    title = "Verteilung der Mordraten",
+    x = "Mordrate pro 100.000 Einwohner",
+    y = "Anzahl Bundesstaaten"
+  ) +
+  theme_minimal()+
+  theme(text = element_text(size = 16))
+
+# Körperverletzung
+p2 <- ggplot(USArrests, aes(x = Assault)) +
+  geom_histogram(bins = 15, fill = "#56B1F7", alpha = 0.7, color = "white") +
+  geom_vline(aes(xintercept = mean(Assault)), color = "#132B43", linetype = "dashed", size = 1) +
+  labs(
+    title = "Verteilung der Körperverletzungsraten",
+    x = "Körperverletzung pro 100.000 Einwohner", 
+    y = "Anzahl Bundesstaaten"
+  ) +
+  theme_minimal()+
+  theme(text = element_text(size = 16))
+
+# Vergewaltigung  
+p3 <- ggplot(USArrests, aes(x = Rape)) +
+  geom_histogram(bins = 15, fill = "#56B1F7", alpha = 0.7, color = "white") +
+  geom_vline(aes(xintercept = mean(Rape)), color = "#132B43", linetype = "dashed", size = 1) +
+  labs(
+    title = "Verteilung der Vergewaltigungsraten",
+    x = "Vergewaltigung pro 100.000 Einwohner",
+    y = "Anzahl Bundesstaaten"
+  ) +
+  theme_minimal()+
+  theme(text = element_text(size = 16))
+
+# Urbanisierung
+p4 <- ggplot(USArrests, aes(x = UrbanPop)) +
+  geom_histogram(bins = 15, fill = "#56B1F7", alpha = 0.7, color = "white") +
+  geom_vline(aes(xintercept = mean(UrbanPop)), color = "#132B43", linetype = "dashed", size = 1) +
+  labs(
+    title = "Verteilung der Urbanisierung",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Anzahl Bundesstaaten"
+  ) +
+  theme_minimal()+
+  theme(text = element_text(size = 16))
+```
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 8
+#| layout-ncol: 1
+# Plots anzeigen
+
+p1
+p2
+p3
+p4
+```
+
+## Regressionsanalyse
+
+```{r regression-analysis}
+#| tbl-cap: "Ergebnisse der multiplen linearen Regression"
+
+# Multiple Regression durchführen
+model1 <- lm(Murder ~ UrbanPop + Assault + Rape, data = USArrests)
+
+# Modellzusammenfassung aufbereiten
+model_summary <- tidy(model1, conf.int = TRUE) |>
+  mutate(
+    term = case_when(
+      term == "(Intercept)" ~ "Konstante",
+      term == "UrbanPop" ~ "Urbanisierung (%)",
+      term == "Assault" ~ "Körperverletzung",
+      term == "Rape" ~ "Vergewaltigung",
+      TRUE ~ term
+    ),
+    across(where(is.numeric), ~ round(.x, 4))
+  )
+
+# Schöne Tabelle
+model_summary |>
+  select(term, estimate, std.error, statistic, p.value, conf.low, conf.high) |>
+  flextable() |>
+  set_header_labels(
+    term = "Prädiktor",
+    estimate = "β",
+    std.error = "SE",
+    statistic = "t",
+    p.value = "p",
+    conf.low = "95% KI untere Grenze",
+    conf.high = "95% KI obere Grenze"  
+  ) |>
+  theme_vanilla() |>
+  autofit()
+```
+
+Das Regressionsmodell erklärt `r round(summary(model1)$r.squared * 100, 1)`% der Varianz in den Mordraten (R² = `r round(summary(model1)$r.squared, 3)`). Die Körperverletzungsrate ist der stärkste Prädiktor für Mordraten.
+
+## Bootstrap-Analyse für robuste Schätzungen
+
+```{r bootstrap-analysis}
+#| echo: true
+#| cache: true
+
+# Bootstrap-Verfahren für robuste Konfidenzintervalle
+n_boot <- 1000
+bootstrap_results <- matrix(NA, nrow = n_boot, ncol = 4)
+colnames(bootstrap_results) <- c("Intercept", "UrbanPop", "Assault", "Rape")
+
+# Bootstrap-Schleife
+for(i in 1:n_boot) {
+    # Zufällige Stichprobe mit Zurücklegen
+    boot_indices <- sample(nrow(USArrests), replace = TRUE)
+    boot_data <- USArrests[boot_indices, ]
+    
+    # Regression auf Bootstrap-Stichprobe
+    boot_model <- lm(Murder ~ UrbanPop + Assault + Rape, data = boot_data)
+    bootstrap_results[i, ] <- coef(boot_model)
+}
+
+
+# Bootstrap-Konfidenzintervalle
+bootstrap_ci <- apply(bootstrap_results, 2, quantile, probs = c(0.025, 0.975))
+
+bootstrap_ci|>
+    knitr::kable()
+```
+
+
+
+# Diskussion
+
+Die Ergebnisse zeigen leichte **Zusammenhänge zwischen Urbanisierung und Gewaltverbrechen** in den amerikanischen Bundesstaaten von 1973. 
+
+## Limitationen
+
+- Die Daten stammen aus dem Jahr 1973 und spiegeln möglicherweise nicht aktuelle Verhältnisse wider
+- Kausale Schlüsse sind aufgrund des Querschnittsdesigns nicht möglich  
+- Weitere sozioökonomische Variablen könnten wichtige Confounder darstellen
+
+## Implikationen
+
+Diese Analyse demonstriert die **Reproduzierbarkeit** statistischer Analysen durch:
+
+- Vollständige Dokumentation des Analysecodes
+- Verwendung von Versionskontrolle für R und Pakete
+- Automatische Generierung von Tabellen und Abbildungen
+- Einbindung von Literaturverzeichnis und Zitationen
+
+
+# Literatur
+
+::: {#refs}
+:::
+
+# Anhang
+
+## Sessioninfo
+
+```{r sessioninfo}
+#| echo: false
+pander::pander(sessionInfo())
+```
+
+## Zusätzliche Korrelationsmatrix
+
+```{r correlation-matrix}
+#| tbl-cap: "Korrelationsmatrix aller Variablen"
+
+cor_matrix <- cor(USArrests) |>
+  round(3)
+
+cor_matrix |>
+  as.data.frame() |>
+  tibble::rownames_to_column("Variable") |>
+  flextable() |>
+  theme_vanilla() |>
+  autofit()
+```

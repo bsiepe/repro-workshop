@@ -1,0 +1,45 @@
+---
+title: "Analyse der US-Kriminalitätsstatistiken: Ein reproduzierbarer Ansatz"
+subtitle: "Untersuchung von Gewaltverbrechen in den amerikanischen Bundesstaaten (1973)"
+author:
+  - name: "Max Mustermann"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-float: true
+    number-sections: true
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r setup, include=FALSE}
+# Daten laden für Inline-Code
+data("USArrests")
+```
+
+# Abstract
+
+Diese Studie analysiert den **USArrests Datensatz** aus dem Jahr 1973, um Zusammenhänge zwischen Urbanisierung und verschiedenen Gewaltverbrechen in den amerikanischen Bundesstaaten zu untersuchen. Mittels *deskriptiver Statistiken* und *Regressionsanalysen* werden die Beziehungen zwischen dem Anteil der Stadtbevölkerung und den Raten von Mord, Körperverletzung und Vergewaltigung analysiert.
+
+# Einleitung
+
+Der **USArrests Datensatz** ist eine klassische Sammlung von Kriminalitätsstatistiken aus den USA des Jahres 1973. Er enthält Informationen über verschiedene Gewaltverbrechen und den Urbanisierungsgrad für alle 50 amerikanischen Bundesstaaten.
+
+Die zentralen Forschungsfragen dieser Analyse sind:
+
+1. Wie hängen Urbanisierung und Mordraten zusammen?
+2. Gibt es Unterschiede in den Kriminalitätsmustern zwischen stark und schwach urbanisierten Staaten?
+3. Welche Faktoren erklären am besten die Variation in den Gewaltverbrechensraten?
+
+# Erste Ergebnisse
+
+## Deskriptive Kennwerte
+
+Die Mordrate variiert zwischen `r range(USArrests$Murder)[1]` und `r range(USArrests$Murder)[2]` pro 100.000 Einwohner, mit einem Durchschnitt von `r round(mean(USArrests$Murder), 1)`. Der Anteil der städtischen Bevölkerung reicht von `r min(USArrests$UrbanPop)`% bis `r max(USArrests$UrbanPop)`%.
+
+Die höchste durchschnittliche Kriminalitätsrate zeigt sich bei `r names(USArrests)[which.max(sapply(USArrests, mean))]` mit einem Mittelwert von `r round(max(sapply(USArrests, mean)), 1)`.
+
+## Erste Eindrücke
+
+Die Daten zeigen eine *erhebliche Variation* zwischen den amerikanischen Bundesstaaten in Bezug auf **Gewaltverbrechensraten**. Besonders auffällig ist die große Spannweite bei der Variable `Murder`, die von sehr niedrigen bis zu sehr hohen Werten reicht. Die `UrbanPop` Variable zeigt, dass die Bundesstaaten sehr unterschiedlich urbanisiert sind. Diese Unterschiede bieten eine gute Grundlage für weitere statistische Analysen zur Untersuchung möglicher Zusammenhänge zwischen Urbanisierung und Kriminalität.
