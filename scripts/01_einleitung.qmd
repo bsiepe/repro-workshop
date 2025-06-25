@@ -84,7 +84,11 @@ welche ich mit einer CC-BY Lizenz verwende:
 -   @Peikert2025
 -   @wickham2023
 
-TODO Link zu Materialien nochmals.
+::: fragment
+Materialien:
+
+![](img/qr-code-wuppertal.png){fig-align="center" width="42%"}
+::: 
 
 ------------------------------------------------------------------------
 

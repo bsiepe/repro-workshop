@@ -36,7 +36,7 @@ bibliography: references.bib
 ---
 ## Reproducibility ist ein Spektrum
 
-![@Molo2025](img/comp-repro-spectrum.png){fig-align="center" width="323"}
+![@Molo2025](img/comp-repro-spectrum.png){fig-align="center" width="723"}
 
 . . .
 
@@ -73,7 +73,7 @@ bibliography: references.bib
 -   **R package** für **Reproduzierbarkeit** von R-Projekten  
 
 ::: columns
-::: .column width="50%"
+::: {.column} width="50%"
 ```{{r}}
 renv::init())  # renv initialisieren
 renv::snapshot()  # Abhängigkeiten erfassen
@@ -81,9 +81,13 @@ renv::restore()  # Abhängigkeiten wiederherstellen
 renv::dependencies()  # Abhängigkeiten auflisten
 ```
 ::: 
-::: .column width="50%"
+::: {.column} width="50%"
 ![@renv2025](img/renv.png){fig-align="center" width="200"}
+:::
+:::
+
 ------------------------------------------------------------------------
+
 ## Nützliche Tools 2: `targets` 
 Pipeline für **Reproduzierbarkeit** von R-Projekten
 
@@ -144,13 +148,16 @@ Gute Ressource:
 
 ::: columns
 ::: {.column width="50%"}
+::: fragment
 > Arrabbiata sauce, or sugo all'arrabbiata in Italian, is a spicy sauce for pasta made from garlic, tomatoes, and dried red chili peppers cooked in olive oil.
 
 [https://en.wikipedia.org/wiki/Arrabbiata_sauce](https://en.wikipedia.org/wiki/Arrabbiata_sauce){style="font-size:0.7em"}
 :::
+:::
 
 ::: {.column width="50%"}
 **Makefile**
+::: fragment
 ``` makefile
 arrabiata.pdf: arrabiata.qmd sauce.csv pasta.R
   quarto render arrabiata.qmd
@@ -167,6 +174,7 @@ aromatics.yaml: sizzle.py garlic.txt chili.json
 ``` bash
 make arrabiata.pdf # execute recipe
 ```
+:::
 :::
 :::
 
@@ -239,8 +247,11 @@ make docker-report
 
 ## Zusätzliches Thema: Code Reviews
 
--   **Code Reviews** sind eine Methode, um die Qualität von Code zu verbessern
--   TODO
+-   Wir verwenden sehr viel Zeit zu schreiben, aber wenig Zeit, um Code zu lesen
+
+::: fragment
+![@hillemann2025](img/code-review.png){fig-align="center" width="600"}
+:::
 
 ------------------------------------------------------------------------
 
@@ -262,16 +273,15 @@ make docker-report
 
 - Es gibt eine **Lernkurve** , aber ...
 
-    - beginnt einfach und lernen Sie **Schritt für Schritt** 💡.
+    - die Tools werden **stetig weiterentwickelt**
 
-    - die Tools werden **stetig weiterentwickelt** 🚀.
+    - investierte Lernzeit kann  **Zeit sparen** 
 
-    - investierte Lernzeit kann Ihnen in Zukunft **Zeit sparen** ⏳
-
-    - Fähigkeiten sind **innerhalb/außerhalb von Academia** nützlich 💰 👨‍🔬
+    - Fähigkeiten sind **innerhalb/außerhalb von Academia** nützlich 
 
 
 ------------------------------------------------------------------------
+
 ## Quarto für andere Dinge
 
 -   Quarto für eigene Webseiten: <https://quarto.org/docs/websites/>
@@ -281,7 +291,7 @@ make docker-report
 -   Quarto für Lehrmaterialien: Beispiel <https://datavizf24.classes.andrewheiss.com/>
 
 ------------------------------------------------------------------------
-## Kontakt
+
 
 ## Kontakt
 

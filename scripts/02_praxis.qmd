@@ -42,18 +42,15 @@ bibliography: references.bib
 -   Enthält Metadaten für das Dokument
 -   Beispiel:
 
-```{.yaml .fragment data-fragment-index=1}
+```{markdown}
+#| code-line-numbers: "1-2, 3-6, 7-18, 19-21"
 title: "Using features of dynamic networks to guide treatment selection and outcome prediction"
 subtitle: "Simulation Code"
-```
-```{.yaml .fragment data-fragment-index=2}
 author: 
  - name: Björn S. Siepe
    orcid: 0000-0002-9558-4648
    affiliations: University of Marburg
 date: "`r Sys.Date()`"
-```
-```{.yaml .fragment data-fragment-index=3}
 format:
   html:
     toc: true
@@ -66,8 +63,6 @@ format:
     fig-height: 4.5
     fig-align: "center"
     embed-resouces: true
-```
-```{.yaml .fragment data-fragment-index=4}
 execute:
   message: false
   warning: false
@@ -164,31 +159,37 @@ plot(cars, main="Speed vs Distance")
     - Ausführung
     - Abbildungsoptionen
 
+::: fragment
 ```{{r}}
 #| label: Beispielchunk
 #| echo: true 
 #| fig-width: 6
 ```
-
+::: 
 
 ## Code Chunks: Optionen
 
 Verschiedene Optionen können in den Code Chunks verwendet werden:
 
-![@wickham2023](img/chunk-options.png){fig-align="center" width="860"}
+![@wickham2023](img/chunk-options.png){fig-align="center" width="950"}
 
 
 ## Inline Code
 
 - Inline Code wird mit `r` oder `python` in Backticks geschrieben:
 
+::: fragment
 ````markdown
-Der Mittelwert der ganzen Zahlen von 1 bis 5 ist `r mean(c(1, 2, 3, 4, 5))`.
+Der Mittelwert der ganzen Zahlen von 1 bis 5 ist "`{r} mean(c(1, 2, 3, 4, 5))`".
 ````
+::: 
 
+::: fragment
 Ergibt:
 
 Der Mittelwert der ganzen Zahlen von 1 bis 5 ist `r mean(c(1, 2, 3, 4, 5))`.
+::: 
+
 
 ## Visual Editor
 
@@ -240,9 +241,9 @@ ggplot(USArrests, aes(x = UrbanPop, y = Murder, color = Assault)) +
 ::: fragment
 ```{r}
 #| echo: false
-#| fig-width: 6
-#| fig-height: 6
-#| layout-ncol: 1
+#| fig-width: 4
+#| fig-height: 4
+#| layout-ncol: 2
 #| code-fold: true
 
 # Scatterplot
@@ -279,11 +280,14 @@ p2
 
 - Externe Bilder können mit Markdown-Syntax oder knitr::include_graphics() eingefügt werden:
 
+::: fragment
 **Markdown-Syntax:**
 ````markdown
 ![Bildbeschreibung](pfad/zum/bild.png){width=50%}
 ````
+::: 
 
+::: fragment
 **R Code Chunk:**
 ```{r}
 #| echo: true
@@ -293,16 +297,37 @@ p2
 
 knitr::include_graphics("images/my_plot.png")
 ```
+::: 
 
+::: fragment
 **Online-Bilder:**
 ````markdown
 ![R Logo](https://www.r-project.org/logo/Rlogo.png){width=200px}
 ````
+:::
 
-## Tabellen
+## Tabellen: In Quarto
+
+-   Tabellen können in Quarto mit Markdown-Syntax erstellt werden.
+-   Beispiel:
+
+::: fragment
+
+| Bundesstaat | Mordrate | UrbanPop | Assault |
+|-------------|----------|----------|---------|
+| Alabama     | 13.2     | 58.0     | 236.0   |
+| Alaska      | 10.0     | 48.0     | 263.0   |
+|-------------|----------|----------|---------|
+
+
+:::
+
+## Tabellen: In R
 
 -   Tabellen können mit vielen Paketen erstellt werden, z.B. `kable`, `gt`, `flextable` oder `pander`.
 -   Beispiel mit `kable`:
+
+::: fragment
 ```{r}
 #| echo: true
 
@@ -310,12 +335,30 @@ data("USArrests")
 library(knitr)
 kable(head(USArrests), caption = "Erste 6 Zeilen des USArrests Datensatzes") 
 ``` 
+:::
+
 
 ## Tabellen: Formatierung
+
+-  Tabellen können mit verschiedenen Paketen formatiert werden
+-  Dabei können sehr schöne und anpassbare Tabellen erstellt werden, die auch Visualisierungen enthalten können
+-  Simples Beispiel mit `gt` und `gtExtras`:
+
+::: fragment
+```{r}
+#| code-fold: true
+library(gt)
+library(gtExtras)
+gtExtras::gt_plt_summary(USArrests)
+```
+
+
 
 ## Tabellen-Export für Manuskripte
 -   Tabellen können in verschiedenen Formaten exportiert werden, z.B. LaTeX, HTML oder Word.
 -   Beispiel mit `flextable` für eine APA-konforme Tabelle:
+
+::: fragment
 ```{r}
 #| echo: true
 #| eval: false
@@ -325,6 +368,7 @@ tabelle <- flextable(head(USArrests))
 tabelle |>
   save_as_docx("USArrests_table.docx", path = here::here("tables"))
 ``` 
+:::
 
 ## Übung 2
 
@@ -339,10 +383,13 @@ tabelle |>
 
 -   Referenzen können mit BibTeX-Dateien eingebunden werden. 
 -   Als Beispiel verwenden wir `referenzen.bib`. Dies müssen wir im YAML-Header angeben:
+
+:::fragment
 ````yaml
 bibliography: referenzen.bib
 csl: apa.csl  # Optional: Style
 ````
+:::
 
 - Ein Zitat kann dann so aussehen: 
   - `[@wickham2016]` → (Wickham, 2016)
@@ -403,6 +450,7 @@ Eine typische `referenzen.bib` Datei sieht so aus:
 - Nur zitierte Quellen werden angezeigt
 - Anpassung der Position:
 
+::: fragment
 ````markdown
 # Literatur
 ::: {#refs}
@@ -411,7 +459,7 @@ Eine typische `referenzen.bib` Datei sieht so aus:
 # Anhang
 Weiterer Inhalt nach dem Literaturverzeichnis...
 ````
-
+::: 
 
 ## Rechenintensive Chunks
 
@@ -420,7 +468,9 @@ Weiterer Inhalt nach dem Literaturverzeichnis...
     -  Ausführung des Codes auf einem Server
     -  oder bei Zufallsimulationen
     -  oder wenn wir nur den Code zeigen wollen
--   Beispiel:
+-   Beispiel für die Übung gleich:
+
+::: fragment
 ```{r}
 #| label: bootstrap-example
 #| echo: true
@@ -432,7 +482,7 @@ data("USArrests")
 n_boot <- 1000
 bootstrap_results <- numeric(n_boot)
 
-# Warnung: Dieser Code dauert ca. 30 Sekunden!
+# Bootstrap durchführen und Zeit messen
 system.time({
   for(i in 1:n_boot) {
     # Zufälliges Sampling mit Zurücklegen
@@ -452,7 +502,7 @@ ci_upper <- quantile(bootstrap_results, 0.975)
 
 
 ``` 
-
+:::
 
 ## Übung 3
 
@@ -463,11 +513,201 @@ ci_upper <- quantile(bootstrap_results, 0.975)
 -   Führen Sie eine Regression auf den USArrests Datensatz durch und speichern Sie das Ergebnis. Sorgen Sie dafür, dass der Code nicht ausgeführt wird, wenn das Dokument gerendert wird. 
 -   Optional: Versuchen Sie, das Dokument so zu formatieren, dass es möglichst nah an einen echten Artikel herankommt.
 
+## Zusätzliche Vorteile von Quarto - Code-Highlighting
 
-## Kleine Zusatztips
+::: columns
+::: {.column width="50%"}
+###  Quarto Input
+`````markdown
+```{r}
+#| code-line-numbers: "1-2,4-5"
+library(ggplot2)
+data(mtcars)
+# Create visualization
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() + theme_minimal()
+```
 
-- `.qmd` zu `.r` umwandeln mit `knitr::`
+`````
+:::
 
+::: {.column width="50%"}
+###  Rendered Output
+
+```{r}
+#| code-line-numbers: "1-2,4-5"
+#| echo: true
+#| eval: false
+library(ggplot2)
+data(mtcars)
+# Create visualization
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() + theme_minimal()
+```
+
+
+:::
+:::
+
+---
+
+## Zusätzliche Vorteile von Quarto - Tabsets
+
+````{.markdown}
+::: {.panel-tabset}
+
+### Code
+
+Hier könnten Sie R Code einfügen, der eine Abbildung erstellt.
+
+### Figure
+
+ggplot Code hier einfügen
+
+:::
+````
+
+## Zusätzliche Vorteile von Quarto - Tabsets
+
+::: {.panel-tabset}
+
+### R Code
+
+Hier kann man den R Code einfügen:
+
+````{.markdown}
+```{{r}}
+library(ggplot2)
+data(USArrests)
+ggplot(USArrests, aes(x = UrbanPop, y = Assault)) +
+  geom_point(color = "#56B1F7", size = 2) +
+  labs(
+    title = "Zusammenhang zwischen Urbanisierung und Assault-Rate",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Assault pro 100.000 Einwohner"
+  ) +
+  theme_minimal()
+```
+```` 
+
+### Abbildung
+
+```{r}
+library(ggplot2)
+data(USArrests)
+ggplot(USArrests, aes(x = UrbanPop, y = Assault)) +
+  geom_point(color = "#56B1F7", size = 2) +
+  labs(
+    title = "Zusammenhang zwischen Urbanisierung und Assault-Rate",
+    x = "Anteil Stadtbevölkerung (%)",
+    y = "Assault pro 100.000 Einwohner"
+  ) +
+  theme_minimal()
+```
+
+:::
+---
+
+
+## Zusätzliche Vorteile von Quarto - Cross-References
+
+::: columns
+::: {.column width="50%"}
+### Quarto Input
+
+::: fragment
+`````markdown
+Siehe @fig-scatter für den Zusammenhang 
+zwischen städtischer Bevölkerung und 
+Mordrate.
+
+```{{r}}
+#| label: fig-scatter
+#| fig-cap: "Städtische Bevölkerung vs Mordrate"
+data("USArrests")
+plot(USArrests$UrbanPop, USArrests$Murder)
+```
+
+Wie in @tbl-summary gezeigt, beträgt 
+die mittlere Mordrate 7.8.
+
+```{{r}}
+#| label: tbl-summary
+#| tbl-cap: "Zusammenfassende Statistiken"
+kable(summary(USArrests$Murder))
+```
+
+Die Analyse in @sec-methods 
+erklärt unser Vorgehen. 
+
+## Methoden {#sec-methods}
+:::
+`````
+:::
+:::
+
+::: {.column width="50%"}
+### Cross-Reference Features
+
+**Vorteile:**
+
+- **Automatisch aktualisiert** bei Änderungen
+- **Klickbare Links** in HTML/PDF
+- **Konsistente Formatierung**
+- **Keine manuellen Nummern** erforderlich
+
+
+:::
+:::
+
+---
+
+## Zusätzliche Vorteile von Quarto - Conditional Content
+
+::: columns
+::: {.column width="50%"}
+### Format-spezifischer Content
+`````markdown
+::: {.content-visible when-format="html"}
+Dies ist nur im HTML-Format sichtbar.
+[Interaktives Widget hier]
+:::
+
+::: {.content-visible when-format="pdf"}  
+Dies ist nur im PDF-Format sichtbar.
+Statische Darstellung hier.
+:::
+
+::: {.content-hidden when-format="revealjs"}
+Dies ist nicht im Reveal.js Format sichtbar.
+:::
+`````
+
+
+:::
+
+::: {.column width="50%"}
+### Profile-basierter Content
+`````markdown
+::: {.content-visible when-profile="advanced"}
+Fortgeschrittene Details hier.
+:::
+
+::: {.content-visible when-profile="beginner"}  
+Einfache  Einführung hier.
+:::
+`````
+
+**Rendering:**
+```bash
+# Mit Profil rendern
+quarto render --profile advanced
+quarto render --profile beginner
+```
+
+
+:::
+:::
 
 ## Session Info
 ```{r}
