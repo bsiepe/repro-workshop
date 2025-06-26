@@ -79,7 +79,6 @@ bibliography: references.bib
 Teile dieses Workshops beruhen teils verbatim oder sehr nah auf folgenden Ressourcen, 
 welche ich mit einer CC-BY Lizenz verwende: 
 
--   [CRS Primer on dynamic reporting](https://doi.org/10.5281/zenodo.7565735)
 -   @Molo2025 
 -   @Peikert2025
 -   @wickham2023
@@ -87,7 +86,7 @@ welche ich mit einer CC-BY Lizenz verwende:
 ::: fragment
 Materialien:
 
-![](img/qr-code-wuppertal.png){fig-align="center" width="42%"}
+![](img/qr-code-wuppertal.png){fig-align="center" width="32%"}
 ::: 
 
 ------------------------------------------------------------------------
@@ -132,9 +131,7 @@ $\rightarrow$ **Computational reproducibility kann schwierig sein!**
 outlets internally conducting computational reproducibility checks.
 :::
 
-::: fragment
-![@brodeur2024](img/brodeur2025.png){fig-align="center" width="65%" height="400"}
-:::
+
 ------------------------------------------------------------------------
 
 ## Terminologie

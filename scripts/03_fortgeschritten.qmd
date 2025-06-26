@@ -73,15 +73,15 @@ bibliography: references.bib
 -   **R package** für **Reproduzierbarkeit** von R-Projekten  
 
 ::: columns
-::: {.column} width="50%"
+::: {.column width="50%"}
 ```{{r}}
-renv::init())  # renv initialisieren
+renv::init()  # renv initialisieren
 renv::snapshot()  # Abhängigkeiten erfassen
 renv::restore()  # Abhängigkeiten wiederherstellen
 renv::dependencies()  # Abhängigkeiten auflisten
 ```
 ::: 
-::: {.column} width="50%"
+::: {.column width="50%"}
 ![@renv2025](img/renv.png){fig-align="center" width="200"}
 :::
 :::
@@ -143,21 +143,14 @@ Gute Ressource:
 
 ## Automatisierung mit Make
 
+::: fragment
 - Tool für **komputationale Rezepte**
-- Automatisierung von mehreren Schritten in einem
+:::
 
 ::: columns
 ::: {.column width="50%"}
 ::: fragment
-> Arrabbiata sauce, or sugo all'arrabbiata in Italian, is a spicy sauce for pasta made from garlic, tomatoes, and dried red chili peppers cooked in olive oil.
-
-[https://en.wikipedia.org/wiki/Arrabbiata_sauce](https://en.wikipedia.org/wiki/Arrabbiata_sauce){style="font-size:0.7em"}
-:::
-:::
-
-::: {.column width="50%"}
 **Makefile**
-::: fragment
 ``` makefile
 arrabiata.pdf: arrabiata.qmd sauce.csv pasta.R
   quarto render arrabiata.qmd
@@ -169,17 +162,21 @@ aromatics.yaml: sizzle.py garlic.txt chili.json
   python sizzle.py garlic.txt
   python sizzle.py chili.json
 ```
+:::
 
+::: fragment
 **Terminal**
 ``` bash
 make arrabiata.pdf # execute recipe
 ```
 :::
 :::
-:::
 
+::: {.column width="50%"}
 ::: fragment
 ![@Molo2025](img/Make-diagram.png){fig-align="center" width="600"}
+:::
+:::
 :::
 
 ---

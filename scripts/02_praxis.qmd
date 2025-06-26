@@ -42,8 +42,8 @@ bibliography: references.bib
 -   Enthält Metadaten für das Dokument
 -   Beispiel:
 
-```{markdown}
-#| code-line-numbers: "1-2, 3-6, 7-18, 19-21"
+::: fragment
+```markdown
 title: "Using features of dynamic networks to guide treatment selection and outcome prediction"
 subtitle: "Simulation Code"
 author: 
@@ -68,6 +68,7 @@ execute:
   warning: false
   eval: false
 ```
+:::
 
 ## Text
 
@@ -312,13 +313,21 @@ knitr::include_graphics("images/my_plot.png")
 -   Beispiel:
 
 ::: fragment
+```markdown
+| Bundesstaat | Mordrate | UrbanPop | Assault |
+|-------------|----------|----------|---------|
+| Alabama     | 13.2     | 58.0     | 236.0   |
+| Alaska      | 10.0     | 48.0     | 263.0   |
+
+```
+:::
+
+::: fragment
 
 | Bundesstaat | Mordrate | UrbanPop | Assault |
 |-------------|----------|----------|---------|
 | Alabama     | 13.2     | 58.0     | 236.0   |
 | Alaska      | 10.0     | 48.0     | 263.0   |
-|-------------|----------|----------|---------|
-
 
 :::
 
@@ -334,7 +343,8 @@ knitr::include_graphics("images/my_plot.png")
 data("USArrests")
 library(knitr)
 kable(head(USArrests), caption = "Erste 6 Zeilen des USArrests Datensatzes") 
-``` 
+```
+
 :::
 
 
@@ -347,12 +357,13 @@ kable(head(USArrests), caption = "Erste 6 Zeilen des USArrests Datensatzes")
 ::: fragment
 ```{r}
 #| code-fold: true
+#| echo: true
 library(gt)
 library(gtExtras)
 gtExtras::gt_plt_summary(USArrests)
 ```
 
-
+:::
 
 ## Tabellen-Export für Manuskripte
 -   Tabellen können in verschiedenen Formaten exportiert werden, z.B. LaTeX, HTML oder Word.
@@ -466,7 +477,6 @@ Weiterer Inhalt nach dem Literaturverzeichnis...
 -   Teilweise möchten wir Code nicht ausführen, wenn das Dokument gerendert wird
     -  z.B. bei rechenintensiven Operationen
     -  Ausführung des Codes auf einem Server
-    -  oder bei Zufallsimulationen
     -  oder wenn wir nur den Code zeigen wollen
 -   Beispiel für die Übung gleich:
 
@@ -475,9 +485,7 @@ Weiterer Inhalt nach dem Literaturverzeichnis...
 #| label: bootstrap-example
 #| echo: true
 #| eval: false
-
 data("USArrests")
-
 # Bootstrap durchführen, um Konfidenzintervall einer Regression zu schätzen
 n_boot <- 1000
 bootstrap_results <- numeric(n_boot)
@@ -487,9 +495,7 @@ system.time({
   for(i in 1:n_boot) {
     # Zufälliges Sampling mit Zurücklegen
     boot_sample <- sample(nrow(USArrests), replace = TRUE)
-    boot_data <- USArrests[boot_sample, ]
-    
-    
+    boot_data <- USArrests[boot_sample, ]    
     boot_model <- lm(Murder ~ UrbanPop, data = boot_data)
     # Extrahieren der Slope
     bootstrap_results[i] <- coef(boot_model)[2]  
@@ -499,8 +505,6 @@ system.time({
 # Konfidenzintervall berechnen
 ci_lower <- quantile(bootstrap_results, 0.025)
 ci_upper <- quantile(bootstrap_results, 0.975) 
-
-
 ``` 
 :::
 
@@ -519,23 +523,23 @@ ci_upper <- quantile(bootstrap_results, 0.975)
 ::: {.column width="50%"}
 ###  Quarto Input
 `````markdown
-```{r}
-#| code-line-numbers: "1-2,4-5"
+```{{r}}
+#| code-line-numbers: "1-2|4-5"
 library(ggplot2)
 data(mtcars)
 # Create visualization
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() + theme_minimal()
 ```
-
 `````
+
 :::
 
 ::: {.column width="50%"}
 ###  Rendered Output
 
 ```{r}
-#| code-line-numbers: "1-2,4-5"
+#| code-line-numbers: "1-2|4-5"
 #| echo: true
 #| eval: false
 library(ggplot2)
